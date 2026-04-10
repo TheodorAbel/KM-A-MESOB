@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useCallback, useMemo } from 'react';
+import { useAppStore } from '@/lib/store';
 import { User, UserRole } from '@/types';
 
 interface AuthContextType {
@@ -12,52 +13,39 @@ interface AuthContextType {
   isJunior: boolean;
 }
 
-const mockUsers: Record<UserRole, User> = {
-  junior: {
-    id: '1',
-    name: 'Bethel Haile',
-    email: 'bethel.haile@a-mesob.et',
-    role: 'junior',
-    department: 'Customer Service',
-    joinDate: '2025-03-15',
-  },
-  senior: {
-    id: '2',
-    name: 'Daniel Kebede',
-    email: 'daniel.kebede@a-mesob.et',
-    role: 'senior',
-    department: 'Operations',
-    joinDate: '2023-08-01',
-  },
-  admin: {
-    id: '3',
-    name: 'Tigist Alemu',
-    email: 'tigist.alemu@a-mesob.et',
-    role: 'admin',
-    department: 'Human Resources',
-    joinDate: '2022-01-10',
-  },
+const defaultAuth: AuthContextType = {
+  user: null,
+  login: () => {},
+  logout: () => {},
+  isAdmin: false,
+  isSenior: false,
+  isJunior: false,
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>(defaultAuth);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(mockUsers.admin);
+  const { currentUser, switchRole, setCurrentUser } = useAppStore();
 
   const login = useCallback((role: UserRole) => {
-    setUser(mockUsers[role]);
-  }, []);
+    switchRole(role);
+  }, [switchRole]);
 
   const logout = useCallback(() => {
-    setUser(null);
-  }, []);
+    setCurrentUser(null);
+  }, [setCurrentUser]);
 
-  const isAdmin = user?.role === 'admin';
-  const isSenior = user?.role === 'senior' || user?.role === 'admin';
-  const isJunior = user?.role === 'junior';
+  const isAdmin = currentUser?.role === 'admin';
+  const isSenior = currentUser?.role === 'senior' || currentUser?.role === 'admin';
+  const isJunior = currentUser?.role === 'junior';
+
+  const value = useMemo(
+    () => ({ user: currentUser, login, logout, isAdmin, isSenior, isJunior }),
+    [currentUser, login, logout, isAdmin, isSenior, isJunior]
+  );
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, isSenior, isJunior }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
@@ -65,8 +53,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
   return context;
 }

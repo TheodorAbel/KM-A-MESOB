@@ -35,7 +35,7 @@ const navSections: NavSection[] = [
   {
     id: 'community',
     label: 'Community Board',
-    href: '#community',
+    href: '/community',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
