@@ -9,12 +9,12 @@ import { InsightType } from '@/types';
 
 type FilterType = 'All' | InsightType;
 
-const filters: { type: FilterType; label: string; emoji: string }[] = [
-  { type: 'All', label: 'All Posts', emoji: '📋' },
-  { type: 'Insight', label: 'Insights', emoji: '💡' },
-  { type: 'Challenge', label: 'Challenges', emoji: '⚠️' },
-  { type: 'Lesson Learned', label: 'Lessons', emoji: '📘' },
-  { type: 'Question', label: 'Questions', emoji: '❓' },
+const filters: { type: FilterType; label: string; sublabel: string; emoji: string }[] = [
+  { type: 'All', label: 'All Posts', sublabel: 'ሁሉም ፖስቶች', emoji: '📋' },
+  { type: 'Insight', label: 'Insights', sublabel: 'ግንዛቦች', emoji: '💡' },
+  { type: 'Challenge', label: 'Challenges', sublabel: 'ችግሮች', emoji: '⚠️' },
+  { type: 'Lesson Learned', label: 'Lessons', sublabel: 'ትምህርቶች', emoji: '📘' },
+  { type: 'Question', label: 'Questions', sublabel: 'ጥያቄዎች', emoji: '❓' },
 ];
 
 export default function CommunityPage() {
@@ -40,7 +40,7 @@ export default function CommunityPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-slate-800">Community Board</h1>
           <p className="text-slate-500 mt-1">
-            Share insights, challenges, and lessons learned from your weekly sessions
+            ማህበረሰብ ቦርድ • Share insights, challenges, and lessons learned
           </p>
         </div>
 
@@ -59,6 +59,9 @@ export default function CommunityPage() {
                 }`}
               >
                 {filter.emoji} {filter.label}
+                <span className={`ml-1 text-xs ${activeFilter === filter.type ? 'text-blue-200' : 'text-slate-400'}`}>
+                  {filter.sublabel}
+                </span>
               </button>
             ))}
           </div>
@@ -67,11 +70,13 @@ export default function CommunityPage() {
         <div className="space-y-4">
           {filteredPosts.length === 0 ? (
             <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <svg className="w-16 h-16 mx-auto text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
+              <div className="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                </svg>
+              </div>
               <p className="text-lg font-medium text-slate-700">No posts yet</p>
-              <p className="text-slate-500 mt-1">Be the first to share an insight!</p>
+              <p className="text-slate-500 mt-1">አዲስ ፅሁፍ ይጻፉ • Be the first to share an insight!</p>
             </div>
           ) : (
             filteredPosts.map((post) => (
