@@ -14,6 +14,29 @@ const categories: { id: ArticleCategory; label: string; icon: string; color: str
   { id: 'Digital Infrastructure', label: 'Digital Infrastructure', icon: '⚙️', color: 'bg-blue-500' },
 ];
 
+function Toast({ message, type, onClose }: { message: string; type: 'success' | 'warning'; onClose: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 4000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`fixed bottom-6 right-6 px-6 py-4 rounded-xl shadow-lg text-white animate-in slide-in-from-bottom-4 ${
+      type === 'success' ? 'bg-green-600' : 'bg-amber-600'
+    }`}>
+      <div className="flex items-center gap-3">
+        <span className="text-2xl">{type === 'success' ? '✅' : '🚩'}</span>
+        <p className="font-medium">{message}</p>
+        <button onClick={onClose} className="ml-4 p-1 hover:bg-white/20 rounded">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ArticleCard({ article, onClick }: { article: KnowledgeArticle; onClick: () => void }) {
   const { users } = useAppStore();
   const author = users.find((u) => u.id === article.authorId);
@@ -24,9 +47,17 @@ function ArticleCard({ article, onClick }: { article: KnowledgeArticle; onClick:
       className="bg-white rounded-xl border border-slate-200 p-5 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all group"
     >
       <div className="flex items-start justify-between mb-3">
-        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-          {article.status}
-        </span>
+        <div className="flex gap-2">
+          {article.needsVerification ? (
+            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
+              ⚠️ Needs Verification
+            </span>
+          ) : (
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+              {article.status}
+            </span>
+          )}
+        </div>
         <span className="text-xs text-slate-400">{article.views} views</span>
       </div>
       <h3 className="font-semibold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
@@ -54,49 +85,129 @@ function ArticleCard({ article, onClick }: { article: KnowledgeArticle; onClick:
 }
 
 function ArticleViewer({ article, onClose }: { article: KnowledgeArticle; onClose: () => void }) {
-  const { users } = useAppStore();
+  const { users, flagArticle, clearFlagArticle } = useAppStore();
+  const { user, isSenior, isAdmin } = useAuth();
   const author = users.find((u) => u.id === article.authorId);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' } | null>(null);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+
+  const canEdit = isSenior || isAdmin;
+  const canFlag = !article.needsVerification;
+
+  const handleFlag = () => {
+    if (!user) return;
+    flagArticle(article.id, user.id);
+    setToast({
+      message: `Alert sent to Author: Tacit practice differs from this formal document.`,
+      type: 'warning'
+    });
+  };
+
+  const handleResolveFlag = () => {
+    clearFlagArticle(article.id);
+    setIsEditorOpen(true);
+  };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden h-full flex flex-col">
-      <div className="p-6 border-b border-slate-200">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium mb-3 ${article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-              {article.category}
-            </span>
-            <h2 className="text-2xl font-bold text-slate-800 mb-2">{article.title}</h2>
-            <div className="flex items-center gap-4 text-sm text-slate-500">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-white text-sm font-medium">
-                  {author?.avatar || author?.name?.charAt(0) || '?'}
+    <>
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden h-full flex flex-col">
+        <div className="p-6 border-b border-slate-200">
+          {/* Verification Banner */}
+          {article.needsVerification && (
+            <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🚩</span>
+                <div className="flex-1">
+                  <p className="font-semibold text-amber-800">Reality Check Flagged</p>
+                  <p className="text-sm text-amber-700">
+                    Flagged by {users.find(u => u.id === article.flaggedBy)?.name || 'Unknown'} on {new Date(article.flaggedAt || '').toLocaleDateString()}
+                  </p>
                 </div>
-                <span>{author?.name || 'Unknown'}</span>
+                {canEdit && (
+                  <button
+                    onClick={handleResolveFlag}
+                    className="px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors"
+                  >
+                    Resolve & Update Document
+                  </button>
+                )}
               </div>
-              <span>•</span>
-              <span>{new Date(article.updatedAt).toLocaleDateString()}</span>
-              <span>•</span>
-              <span>{article.views} views</span>
             </div>
+          )}
+
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-3">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                  article.needsVerification ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                  article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
+                }`}>
+                  {article.needsVerification ? '⚠️ Needs Verification' : article.category}
+                </span>
+                {!canEdit && !article.needsVerification && (
+                  <button
+                    onClick={handleFlag}
+                    className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 border border-slate-200 rounded-full hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all flex items-center gap-1.5"
+                  >
+                    <span>🚩</span>
+                    <span>Flag: Outdated / Reality Check</span>
+                  </button>
+                )}
+              </div>
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">{article.title}</h2>
+              <div className="flex items-center gap-4 text-sm text-slate-500">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-white text-sm font-medium">
+                    {author?.avatar || author?.name?.charAt(0) || '?'}
+                  </div>
+                  <span>{author?.name || 'Unknown'}</span>
+                </div>
+                <span>•</span>
+                <span>{new Date(article.updatedAt).toLocaleDateString()}</span>
+                <span>•</span>
+                <span>{article.views} views</span>
+              </div>
+            </div>
+            <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg">
+              <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg">
-            <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-2 mt-4">
+            {article.tags.map((tag) => (
+              <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">
+                #{tag}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="flex items-center gap-2 mt-4">
-          {article.tags.map((tag) => (
-            <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">
-              #{tag}
-            </span>
-          ))}
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br/>') }} />
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br/>') }} />
-      </div>
-    </div>
+
+      {isEditorOpen && (
+        <ArticleEditorModal
+          isOpen={isEditorOpen}
+          onClose={() => {
+            setIsEditorOpen(false);
+            onClose();
+          }}
+          initialTitle={article.title}
+          initialContent={article.content}
+          initialCategory={article.category}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+    </>
   );
 }
 
@@ -240,14 +351,27 @@ function KnowledgeBaseContent() {
               </div>
             </div>
 
+            {/* Flagged Articles Filter */}
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🚩</span>
+                <div>
+                  <p className="text-sm font-medium text-amber-800">Needs Verification</p>
+                  <p className="text-xs text-amber-700">
+                    {articles.filter((a) => a.needsVerification).length} articles flagged
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {!canCreate && (
-              <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <div className="mt-4 bg-slate-50 border border-slate-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
                   <span className="text-xl">ℹ️</span>
                   <div>
-                    <p className="text-sm font-medium text-amber-800">Read-Only Access</p>
-                    <p className="text-xs text-amber-700 mt-1">
-                      Contact your supervisor to contribute articles.
+                    <p className="text-sm font-medium text-slate-700">Read-Only Access</p>
+                    <p className="text-xs text-slate-600 mt-1">
+                      Flag articles if practices differ from documentation.
                     </p>
                   </div>
                 </div>
@@ -258,7 +382,10 @@ function KnowledgeBaseContent() {
           <div className="col-span-12 lg:col-span-9">
             {selectedArticle ? (
               <div className="h-[calc(100vh-280px)]">
-                <ArticleViewer article={selectedArticle} onClose={() => setSelectedArticle(null)} />
+                <ArticleViewer 
+                  article={selectedArticle} 
+                  onClose={() => setSelectedArticle(null)} 
+                />
               </div>
             ) : (
               <div>

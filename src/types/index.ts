@@ -34,6 +34,9 @@ export interface KnowledgeArticle {
   views: number;
   likes: number;
   status: 'draft' | 'published' | 'archived';
+  needsVerification?: boolean;
+  flaggedBy?: string;
+  flaggedAt?: string;
 }
 
 export type InsightType = 'Insight' | 'Challenge' | 'Lesson Learned' | 'Question';

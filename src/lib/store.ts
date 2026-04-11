@@ -40,6 +40,8 @@ interface AppState {
   addArticle: (article: Omit<KnowledgeArticle, 'id' | 'createdAt' | 'updatedAt' | 'views' | 'likes'>) => void;
   updateArticle: (id: string, updates: Partial<KnowledgeArticle>) => void;
   deleteArticle: (id: string) => void;
+  flagArticle: (id: string, userId: string) => void;
+  clearFlagArticle: (id: string) => void;
   
   addInsightPost: (post: Omit<InsightPost, 'id' | 'createdAt' | 'upvotes' | 'hasUpvoted' | 'comments' | 'isVerifiedSolution'>) => void;
   toggleUpvote: (postId: string) => void;
@@ -108,6 +110,26 @@ export const useAppStore = create<AppState>()(
       deleteArticle: (id) => {
         set((state) => ({
           articles: state.articles.filter((article) => article.id !== id),
+        }));
+      },
+
+      flagArticle: (id, userId) => {
+        set((state) => ({
+          articles: state.articles.map((article) =>
+            article.id === id
+              ? { ...article, needsVerification: true, flaggedBy: userId, flaggedAt: new Date().toISOString() }
+              : article
+          ),
+        }));
+      },
+
+      clearFlagArticle: (id) => {
+        set((state) => ({
+          articles: state.articles.map((article) =>
+            article.id === id
+              ? { ...article, needsVerification: false, flaggedBy: undefined, flaggedAt: undefined }
+              : article
+          ),
         }));
       },
 
