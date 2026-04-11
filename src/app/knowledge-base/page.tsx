@@ -9,9 +9,9 @@ import { ArticleEditorModal } from '@/components/knowledge/ArticleEditorModal';
 import { ArticleCategory, KnowledgeArticle } from '@/types';
 
 const categories: { id: ArticleCategory; label: string; icon: string; color: string }[] = [
-  { id: 'HR Policies', label: 'HR Policies', icon: '👥', color: 'bg-red-500' },
-  { id: 'IT Procedures', label: 'IT Procedures', icon: '💻', color: 'bg-blue-500' },
-  { id: 'Quality Guidelines', label: 'Quality Guidelines', icon: '✅', color: 'bg-green-500' },
+  { id: 'Government Integrations', label: 'Government Integrations', icon: '🏛️', color: 'bg-purple-500' },
+  { id: 'FinTech & Payment Gateways', label: 'FinTech & Payments', icon: '💳', color: 'bg-green-500' },
+  { id: 'Digital Infrastructure', label: 'Digital Infrastructure', icon: '⚙️', color: 'bg-blue-500' },
 ];
 
 function ArticleCard({ article, onClick }: { article: KnowledgeArticle; onClick: () => void }) {
@@ -164,7 +164,7 @@ function KnowledgeBaseContent() {
               📚 Knowledge Base
             </h1>
             <p className="text-slate-500 mt-1">
-              A-Mesob&apos;s centralized repository for policies and procedures
+              Technical documentation for government integrations and payment systems
             </p>
           </div>
           {canCreate && (

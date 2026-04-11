@@ -15,14 +15,14 @@ interface ArticleEditorModalProps {
   initialCategory?: ArticleCategory;
 }
 
-const categories: ArticleCategory[] = ['HR Policies', 'IT Procedures', 'Quality Guidelines', 'Onboarding', 'Process Documentation'];
+const categories: ArticleCategory[] = ['Government Integrations', 'FinTech & Payment Gateways', 'Digital Infrastructure'];
 
 export function ArticleEditorModal({ 
   isOpen, 
   onClose, 
   initialTitle = '', 
   initialContent = '',
-  initialCategory = 'Process Documentation' 
+  initialCategory = 'Government Integrations' 
 }: ArticleEditorModalProps) {
   const { addArticle, currentUser } = useAppStore();
   const [title, setTitle] = useState(initialTitle);
@@ -67,7 +67,7 @@ export function ArticleEditorModal({
     });
 
     setTitle('');
-    setCategory('Process Documentation');
+    setCategory('Government Integrations');
     setTags('');
     setStatus('published');
     editor.commands.clearContent();

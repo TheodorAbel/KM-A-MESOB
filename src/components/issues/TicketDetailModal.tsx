@@ -195,7 +195,7 @@ export function TicketDetailModal({ ticket, isOpen, onClose }: TicketDetailModal
         onClose={() => setShowArticleEditor(false)}
         initialContent={ticket.resolutionNotes || `## Issue Summary\n${ticket.description}\n\n## Resolution\n\n`}
         initialTitle={`KB-${ticket.id}: ${ticket.title}`}
-        initialCategory="IT Procedures"
+        initialCategory="Digital Infrastructure"
       />
     </>
   );

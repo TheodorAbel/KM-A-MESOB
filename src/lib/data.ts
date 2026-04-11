@@ -1,4 +1,4 @@
-import { User, KnowledgeArticle, InsightPost, IssueTicket, OffboardingRecord, LearningPathway, Notification } from '@/types';
+import { User, KnowledgeArticle, InsightPost, IssueTicket, OffboardingRecord, LearningPathway, Notification, QMSFeedback } from '@/types';
 
 export const mockUsers: User[] = [
   {
@@ -6,62 +6,62 @@ export const mockUsers: User[] = [
     name: 'Bethel Haile',
     email: 'bethel.haile@a-mesob.et',
     role: 'junior',
-    department: 'Customer Service',
+    department: 'Integration',
     joinDate: '2025-03-15',
     avatar: 'BH',
     technicalSkills: [
-      { name: 'Customer Service Fundamentals', completed: true, completedAt: '2025-04-10' },
-      { name: 'Digital Signage Operations', completed: true, completedAt: '2025-04-25' },
-      { name: 'Document Authentication', completed: false },
-      { name: 'Conflict Resolution', completed: false },
+      { name: 'REST API Integration', completed: true, completedAt: '2025-04-10' },
+      { name: 'Ministry APIs Documentation', completed: true, completedAt: '2025-04-25' },
+      { name: 'Telebirr SDK Integration', completed: false },
+      { name: 'Error Handling Patterns', completed: false },
     ],
     supervisorId: '2',
-    bio: 'Passionate about delivering excellent public service to Ethiopian citizens.',
+    bio: 'Passionate about seamless government-to-citizen digital services.',
   },
   {
     id: '2',
     name: 'Daniel Kebede',
     email: 'daniel.kebede@a-mesob.et',
     role: 'senior',
-    department: 'Operations',
+    department: 'Integration',
     joinDate: '2023-08-01',
     avatar: 'DK',
     technicalSkills: [
-      { name: 'Team Leadership', completed: true },
-      { name: 'Process Optimization', completed: true },
-      { name: 'Training & Mentorship', completed: true },
-      { name: 'Incident Management', completed: true },
+      { name: 'API Architecture Design', completed: true },
+      { name: 'Kebele ID Integration', completed: true },
+      { name: 'Revenue Authority e-Tax', completed: true },
+      { name: 'Microservices Patterns', completed: true },
     ],
-    bio: 'Operations specialist with 5+ years experience in government service delivery.',
+    bio: 'Integration architect specializing in Ethiopian government systems.',
   },
   {
     id: '3',
     name: 'Tigist Alemu',
     email: 'tigist.alemu@a-mesob.et',
     role: 'admin',
-    department: 'HR',
+    department: 'Product',
     joinDate: '2022-01-10',
     avatar: 'TA',
     technicalSkills: [
-      { name: 'HR Management', completed: true },
+      { name: 'Platform Architecture', completed: true },
+      { name: 'Security Compliance', completed: true },
       { name: 'Knowledge Management', completed: true },
-      { name: 'Offboarding Processes', completed: true },
-      { name: 'Policy Development', completed: true },
+      { name: 'Stakeholder Management', completed: true },
     ],
-    bio: 'HR Lead dedicated to preserving institutional knowledge and employee growth.',
+    bio: 'Product lead driving digital transformation across Ethiopian government services.',
   },
   {
     id: '4',
     name: 'Samuel Teshome',
     email: 'samuel.teshome@a-mesob.et',
     role: 'junior',
-    department: 'IT',
+    department: 'DevOps',
     joinDate: '2025-01-20',
     avatar: 'ST',
     technicalSkills: [
-      { name: 'System Administration', completed: true, completedAt: '2025-02-15' },
-      { name: 'Network Troubleshooting', completed: false },
-      { name: 'Security Protocols', completed: false },
+      { name: 'Docker & Kubernetes', completed: true, completedAt: '2025-02-15' },
+      { name: 'CI/CD Pipeline Setup', completed: false },
+      { name: 'AWS Ethiopia Region', completed: false },
     ],
     supervisorId: '5',
   },
@@ -70,15 +70,15 @@ export const mockUsers: User[] = [
     name: 'Frehiwot Worku',
     email: 'frehiwot.worku@a-mesob.et',
     role: 'senior',
-    department: 'IT',
+    department: 'DevOps',
     joinDate: '2021-06-15',
     avatar: 'FW',
     technicalSkills: [
-      { name: 'Infrastructure Management', completed: true },
-      { name: 'Security Auditing', completed: true },
-      { name: 'Vendor Management', completed: true },
+      { name: 'Infrastructure as Code', completed: true },
+      { name: 'Telebirr Gateway运维', completed: true },
+      { name: 'Ministry Network Config', completed: true },
     ],
-    bio: 'IT Manager ensuring seamless digital operations for government services.',
+    bio: 'DevOps lead ensuring 99.9% uptime for critical government services.',
   },
   {
     id: '6',
@@ -89,96 +89,281 @@ export const mockUsers: User[] = [
     joinDate: '2020-11-01',
     avatar: 'AG',
     technicalSkills: [
-      { name: 'Quality Standards', completed: true },
-      { name: 'Process Auditing', completed: true },
-      { name: 'Performance Metrics', completed: true },
+      { name: 'Integration Testing', completed: true },
+      { name: 'Performance Benchmarks', completed: true },
+      { name: 'Citizen Experience Metrics', completed: true },
     ],
-    bio: 'Quality assurance expert focused on citizen satisfaction metrics.',
+    bio: 'QA lead focused on zero-failure rates for citizen-facing services.',
   },
 ];
 
 export const mockArticles: KnowledgeArticle[] = [
-  // HR Policies (2 articles)
+  // Government Integrations (3 articles)
   {
     id: '1',
-    title: 'Employee Leave Policy - 2025 Update',
-    content: `# Leave Policy Guidelines\n\n## Annual Leave\n- 14 working days for first year\n- 21 working days after 3 years\n- 28 working days after 5 years\n\n## Sick Leave\n- Up to 30 days with medical certificate\n- Up to 7 days without certificate (annual limit: 14 days)\n\n## Maternity/Paternity Leave\n- Maternity: 90 calendar days paid\n- Paternity: 10 working days\n\n## Request Process\nSubmit leave requests through HR portal at least 5 days in advance.`,
-    category: 'HR Policies',
-    authorId: '3',
-    tags: ['HR', 'leave', 'policy', 'benefits'],
+    title: 'Kebele ID Verification API Integration Guide',
+    content: `# Kebele ID Verification API Integration
+
+## Overview
+Integration with the Ministry of Peace Kebele ID system for real-time citizen identity verification.
+
+## API Endpoint
+\`\`\`javascript
+const KEBILE_API = 'https://api.kebele.gov.et/v2/verify';
+\`\`\`
+
+## Authentication
+Bearer token authentication using ministry-issued credentials.
+
+## Request Format
+\`\`\`json
+{
+  "kebele_id": "ERK-1234567",
+  "full_name": "የስም",
+  "date_of_birth": "1990-05-15",
+  "region": "Addis Ababa"
+}
+\`\`\`
+
+## Response Handling
+- **200**: Identity verified successfully
+- **404**: Citizen not found in registry
+- **429**: Rate limit exceeded (max 100 req/min)
+
+## Error Codes
+| Code | Description | Action |
+|------|-------------|--------|
+| E001 | Invalid ID format | Validate input format |
+| E002 | Database timeout | Retry with exponential backoff |
+| E003 | Ministry server down | Failover to backup system |`,
+    category: 'Government Integrations',
+    authorId: '2',
+    tags: ['kebele', 'identity', 'verification', 'ministry'],
     createdAt: '2025-01-01T00:00:00Z',
     updatedAt: '2025-04-01T09:00:00Z',
-    views: 1245,
-    likes: 89,
+    views: 2341,
+    likes: 187,
     status: 'published',
   },
   {
     id: '2',
-    title: 'Performance Review Guidelines & Career Progression',
-    content: `# Performance Review Process\n\n## Annual Review Cycle\nReviews are conducted annually in December. Mid-year check-ins occur in June.\n\n## Rating Scale\n- Exceptional (5): Consistently exceeds expectations\n- Exceeds (4): Frequently exceeds expectations\n- Meets (3): Consistently meets expectations\n- Developing (2): Sometimes meets expectations\n- Needs Improvement (1): Does not meet expectations\n\n## Career Progression\n### Junior to Senior\n- Minimum 2 years experience\n- All required skills completed\n- Supervisor recommendation\n- Quality metrics above 85%\n\n### Senior to Team Lead\n- Minimum 3 years experience\n- Leadership training completed\n- Mentored at least 2 juniors\n- Incident management proficiency`,
-    category: 'HR Policies',
-    authorId: '3',
-    tags: ['performance', 'reviews', 'career', 'HR'],
+    title: 'Ministry of Revenue e-Tax Portal Data Migration',
+    content: `# e-Tax Portal Data Migration Playbook
+
+## Scope
+Migrating taxpayer records from legacy CSV format to JSON API structure.
+
+## Migration Steps
+
+### Phase 1: Data Extraction
+\`\`\`python
+import pandas as pd
+from tax_migration import Transform
+
+def extract_legacy_taxpayers(file_path: str) -> pd.DataFrame:
+    df = pd.read_csv(file_path, encoding='utf-8-sig')
+    return Transform.to_json_schema(df)
+\`\`\`
+
+### Phase 2: Validation
+- TIN format validation ( Ethiopian TIN is 10 digits)
+- Duplicate detection across regional databases
+- Tax bracket recalculation
+
+### Phase 3: Load
+Use batch insert with transaction rollback on failure.
+
+## Known Issues
+- Some TINs from Oromia region missing leading zeros
+- Legacy system uses Ethiopian calendar dates`,
+    category: 'Government Integrations',
+    authorId: '2',
+    tags: ['e-tax', 'migration', 'revenue', 'data'],
     createdAt: '2025-02-01T10:00:00Z',
     updatedAt: '2025-04-15T14:30:00Z',
-    views: 678,
-    likes: 54,
+    views: 1567,
+    likes: 134,
     status: 'published',
   },
-
-  // IT Procedures (2 articles)
   {
     id: '3',
-    title: 'IT Security Password Reset Protocol',
-    content: `# Password Reset Procedures\n\n## For End Users\nUsers can reset passwords via the self-service portal using their registered email.\n\n## For Staff Assistance\nWhen a customer cannot reset independently:\n\n1. Verify identity with government-issued ID\n2. Document the request in the IT log\n3. Temporarily reset to a secure temporary password\n4. Instruct user to change upon next login\n\n## Security Reminders\n- Never share temporary passwords\n- Always verify caller/customer identity\n- Log all password reset requests`,
-    category: 'IT Procedures',
-    authorId: '5',
-    tags: ['security', 'password', 'IT'],
-    createdAt: '2025-01-25T08:00:00Z',
-    updatedAt: '2025-04-15T16:30:00Z',
-    views: 891,
-    likes: 67,
-    status: 'published',
-  },
-  {
-    id: '4',
-    title: 'A-Mesob Automated Workflow Troubleshooting',
-    content: `# A-Mesob Automated Workflow Troubleshooting Guide\n\n## Common Issues & Solutions\n\n### Issue: Authentication Timeout During Peak Hours\n**Symptom:** Session timeouts after 5 minutes during 10 AM - 12 PM rush.\n**Solution:** Clear browser cache, use Incognito mode. Report to IT if persists.\n\n### Issue: Report Generation Failures\n**Symptom:** Scheduled reports not sending after 10 PM.\n**Solution:** Reschedule critical reports before 8 PM.\n\n### Issue: Printer Queue Stuck\n**Symptom:** Documents stuck in print queue.\n**Solution:** Restart print spooler service, check network connectivity.\n\n## Emergency Contacts\n- IT Helpdesk: it-support@a-mesob.et\n- Network Admin: Frehiwot Worku (ext. 201)`,
-    category: 'IT Procedures',
-    authorId: '5',
-    tags: ['troubleshooting', 'workflow', 'automation', 'IT'],
-    createdAt: '2025-03-10T09:00:00Z',
-    updatedAt: '2025-04-18T11:00:00Z',
-    views: 567,
-    likes: 48,
+    title: 'E-Passport Portal API Error Handling Patterns',
+    content: `# E-Passport Portal Error Handling
+
+## Common Error Scenarios
+
+### 1. Session Timeout During Application
+Citizens submitting passport applications may experience session timeouts after 15 minutes of inactivity.
+
+**Solution**: Implement JWT refresh token rotation with silent re-authentication.
+
+### 2. Photo Upload Size Limits
+ Ethiopian passport photos must be between 10KB and 200KB.
+
+### 3. Regional Server Sync Delays
+Updates from regional passport offices take 2-4 hours to reflect in central database.
+
+## Circuit Breaker Configuration
+\`\`\`yaml
+circuit_breaker:
+  failure_threshold: 5
+  recovery_timeout: 30s
+  half_open_max_calls: 3
+\`\`\``,
+    category: 'Government Integrations',
+    authorId: '3',
+    tags: ['e-passport', 'errors', 'handling', 'session'],
+    createdAt: '2025-03-10T10:30:00Z',
+    updatedAt: '2025-04-20T14:22:00Z',
+    views: 892,
+    likes: 76,
     status: 'published',
   },
 
-  // Quality Guidelines (2 articles)
+  // FinTech & Payment Gateways (2 articles)
   {
-    id: '5',
-    title: 'Customer Service Escalation Procedures',
-    content: `# Escalation Procedures\n\n## When to Escalate\n\nAlways escalate when:\n- Customer is dissatisfied after initial resolution attempt\n- Issue requires special authorization\n- Customer requests to speak with a supervisor\n- Problem affects multiple customers\n\n## Escalation Levels\n\n### Level 1: Team Lead\nFirst point of escalation for team-related issues.\n\n### Level 2: Department Manager\nHandles cross-department conflicts.\n\n### Level 3: Operations Director\nComplex issues requiring resource allocation.\n\n## Documentation\nAll escalations must be logged in the Issue Tracking System within 15 minutes.`,
-    category: 'Quality Guidelines',
-    authorId: '2',
-    tags: ['customer-service', 'escalation', 'procedures'],
-    createdAt: '2025-03-15T10:30:00Z',
-    updatedAt: '2025-04-20T14:22:00Z',
-    views: 342,
-    likes: 28,
+    id: '4',
+    title: 'Telebirr API Integration & Timeout Handling',
+    content: `# Telebirr Payment Gateway Integration
+
+## Overview
+Integrating Safaricom's Telebirr mobile money payment for government service fees.
+
+## API Integration
+\`\`\`javascript
+class TelebirrGateway {
+  async initiatePayment(amount: number, billRef: string) {
+    const response = await fetch('https://api.telebirr.et/v1/payment', {
+      method: 'POST',
+      headers: {
+        'X-API-Key': process.env.TELEBIRR_API_KEY,
+        'X-Merchant-ID': 'A-MESOB-GOV-001'
+      },
+      body: JSON.stringify({
+        amount,
+        billReference: billRef,
+        callbackUrl: 'https://a-mesob.et/payment/callback',
+        expirationMinutes: 15
+      })
+    });
+    return response.json();
+  }
+}
+\`\`\`
+
+## Timeout Handling
+Telebirr transactions must complete within 15 minutes. Implement:
+1. Polling every 30 seconds
+2. Webhook backup notification
+3. Auto-refund after expiration
+
+## Common Issues
+- **USSD push failures**: Retry up to 3 times
+- **Network timeouts**: Check transaction status before retrying
+- **Duplicate submissions**: Idempotency keys are mandatory`,
+    category: 'FinTech & Payment Gateways',
+    authorId: '5',
+    tags: ['telebirr', 'payment', 'mobile-money', 'fintech'],
+    createdAt: '2025-01-25T08:00:00Z',
+    updatedAt: '2025-04-15T16:30:00Z',
+    views: 3421,
+    likes: 298,
     status: 'published',
   },
   {
+    id: '5',
+    title: 'Commercial Bank of Ethiopia Payment Reconciliation',
+    content: `# CBE Payment Reconciliation Process
+
+## Daily Reconciliation Workflow
+
+### Morning Batch (6:00 AM EAT)
+Fetch previous day's transactions from CBE bulk API.
+
+### Reconciliation Steps
+1. Compare transaction IDs
+2. Match payment amounts (handle rounding for different currencies)
+3. Flag unmatched transactions
+4. Generate discrepancy report
+
+### Code Example
+\`\`\`python
+from cbe_client import CBEClient
+from datetime import datetime, timedelta
+
+def reconcile_payments(date: datetime):
+    cbe = CBEClient(api_key=os.getenv('CBE_API_KEY'))
+    transactions = cbe.get_transactions(date=date)
+    
+    for txn in transactions:
+        if not db.payments.find_one({'ref': txn.external_id}):
+            log_unmatched(txn)
+            trigger_investigation(txn)
+\`\`\`
+
+## SLA Requirements
+- 99.5% same-day reconciliation
+- Maximum 0.1% unmatched transactions`,
+    category: 'FinTech & Payment Gateways',
+    authorId: '2',
+    tags: ['cbe', 'bank', 'reconciliation', 'payments'],
+    createdAt: '2025-03-15T09:00:00Z',
+    updatedAt: '2025-04-18T11:00:00Z',
+    views: 1234,
+    likes: 112,
+    status: 'published',
+  },
+
+  // Digital Infrastructure (1 article)
+  {
     id: '6',
-    title: 'Service Quality Standards & Citizen Satisfaction Metrics',
-    content: `# Service Quality Standards\n\n## Key Performance Indicators\n\n### Response Time\n- Average wait time: Target < 20 minutes\n- Service completion: Target < 30 minutes\n- Escalation response: < 15 minutes\n\n### Quality Metrics\n- First-contact resolution: Target 80%\n- Customer satisfaction: Target 90%\n- Document accuracy: Target 99%\n\n## Monthly Reporting\nAll quality metrics are compiled monthly and reviewed in the Operations meeting on the first Monday of each month.\n\n## Improvement Initiatives\n- Weekly process reviews\n- Monthly customer feedback analysis\n- Quarterly service audits`,
-    category: 'Quality Guidelines',
-    authorId: '6',
-    tags: ['quality', 'metrics', 'standards', 'KPI'],
+    title: 'Ethio Telecom API Rate Limiting & Failover',
+    content: `# Ethio Telecom API Rate Limiting
+
+## Current Limits
+- SMS API: 500 requests/minute per client
+- USSD API: 100 requests/minute per client
+- Data Bundle API: 200 requests/minute per client
+
+## Rate Limiter Implementation
+\`\`\`typescript
+class EthioTelecomRateLimiter {
+  private queue: Map<string, number[]> = new Map();
+  
+  async throttle(endpoint: string): Promise<boolean> {
+    const now = Date.now();
+    const window = 60000; // 1 minute
+    
+    if (!this.queue.has(endpoint)) {
+      this.queue.set(endpoint, []);
+    }
+    
+    const timestamps = this.queue.get(endpoint)!.filter(
+      t => now - t < window
+    );
+    
+    if (timestamps.length >= this.getLimit(endpoint)) {
+      return false; // Rate limited
+    }
+    
+    timestamps.push(now);
+    return true;
+  }
+}
+\`\`\`
+
+## Failover Strategy
+When Ethio Telecom API is unavailable:
+1. Switch to CBE SMS gateway (backup)
+2. Queue messages for retry
+3. Alert operations team`,
+    category: 'Digital Infrastructure',
+    authorId: '5',
+    tags: ['ethio-telecom', 'rate-limiting', 'sms', 'failover'],
     createdAt: '2025-02-20T14:00:00Z',
     updatedAt: '2025-04-10T09:15:00Z',
-    views: 445,
-    likes: 36,
+    views: 876,
+    likes: 89,
     status: 'published',
   },
 ];
@@ -187,52 +372,70 @@ export const mockInsightPosts: InsightPost[] = [
   {
     id: '1',
     authorId: '2',
-    title: 'Morning Rush Hour Strategy That Reduced Wait Times by 40%',
-    content: 'We implemented a ticket-based queue system during peak hours (9-11 AM). Instead of first-come-first-served, we now prioritize by document complexity. Simple renewals go to express lane, complex registrations to standard lane. Results: Average wait dropped from 45 min to 27 min.',
-    type: 'Insight',
+    title: 'Telebirr API timeout after exactly 30 seconds',
+    content: 'We discovered that the Telebirr sandbox environment times out after exactly 30 seconds. Production seems fine but we should add proper timeout handling for both.',
+    type: 'Challenge',
     upvotes: 34,
     hasUpvoted: false,
+    codeSnippet: `const timeout = setTimeout(() => {
+  reject(new Error('Telebirr API timeout'));
+}, 30000);`,
+    language: 'typescript',
+    isVerifiedSolution: true,
     comments: [
-      { id: 'c1', authorId: '3', content: 'Great initiative! Can you share the training materials used?', createdAt: '2025-04-20T10:00:00Z' },
-      { id: 'c2', authorId: '1', content: 'This has helped me so much during my shifts!', createdAt: '2025-04-20T11:30:00Z' },
+      { id: 'c1', authorId: '5', content: 'Confirmed on sandbox. Production has 60s timeout. We should align both environments.', createdAt: '2025-04-20T10:00:00Z' },
+      { id: 'c2', authorId: '4', content: 'Added exponential backoff retry logic in the latest PR', createdAt: '2025-04-20T11:30:00Z' },
     ],
     createdAt: '2025-04-19T09:00:00Z',
   },
   {
     id: '2',
     authorId: '1',
-    title: 'Challenge: Elderly Customers Struggling with Self-Service Kiosks',
-    content: 'Many elderly citizens come in without family support and struggle with the digital kiosks. They often give up or take very long. I end up helping them manually which creates bottlenecks. Would appreciate any creative solutions or additional kiosk assistance protocols.',
-    type: 'Challenge',
+    title: 'Kebele ID validation regex for new 10-digit format',
+    content: 'The Ministry of Peace is rolling out a new 10-digit kebele ID format replacing the old 9-character format. I wrote a validation function that handles both.',
+    type: 'Insight',
     upvotes: 28,
     hasUpvoted: false,
+    codeSnippet: `function validateKebeleId(id: string): boolean {
+  const legacyPattern = /^[A-Z]{3}-\\d{7}$/;
+  const newPattern = /^\\d{10}$/;
+  return legacyPattern.test(id) || newPattern.test(id);
+}`,
+    language: 'typescript',
+    isVerifiedSolution: true,
     comments: [
-      { id: 'c3', authorId: '2', content: 'We are piloting a "digital assistant" program - senior employees can volunteer as kiosk guides during peak hours.', createdAt: '2025-04-21T08:00:00Z' },
-      { id: 'c4', authorId: '6', content: 'Adding this to the next quality improvement meeting agenda.', createdAt: '2025-04-21T09:15:00Z' },
+      { id: 'c3', authorId: '2', content: 'Great work! We should add this to the shared utils package.', createdAt: '2025-04-21T08:00:00Z' },
     ],
     createdAt: '2025-04-20T14:30:00Z',
   },
   {
     id: '3',
     authorId: '5',
-    title: 'Lesson Learned: Always Verify Document Scanners Daily',
-    content: 'We had a scanner malfunction go unnoticed for 2 days, resulting in 47 documents that needed rescanning. Now we have a mandatory daily scanner check at shift start. Takes 2 minutes, saves hours of rework.',
+    title: 'Lesson Learned: Always use idempotency keys with CBE payments',
+    content: 'We had a duplicate charge incident because our payment retry logic didn\'t include idempotency keys. CBE processed the same payment request twice. Now all payment requests include X-Idempotency-Key header.',
     type: 'Lesson Learned',
     upvotes: 41,
     hasUpvoted: false,
+    codeSnippet: `headers: {
+  'X-Idempotency-Key': \`payment-\${orderId}-\${Date.now()}\`,
+  'X-API-Key': process.env.CBE_API_KEY
+}`,
+    language: 'typescript',
+    isVerifiedSolution: true,
     comments: [],
     createdAt: '2025-04-18T16:00:00Z',
   },
   {
     id: '4',
     authorId: '6',
-    title: 'Question: Standard Resolution Time for Quality Complaints?',
-    content: 'What is our current SLA for quality-related complaints? I want to ensure our response times meet expectations and need to set proper customer expectations on first contact.',
+    title: 'Question: What\'s our SLA for E-Passport portal failures?',
+    content: 'What\'s our contracted SLA with the E-Passport portal for downtime? I want to ensure our incident response times align with citizen expectations.',
     type: 'Question',
     upvotes: 12,
     hasUpvoted: false,
+    isVerifiedSolution: false,
     comments: [
-      { id: 'c5', authorId: '3', content: 'Standard is 48 hours for initial response, 5 business days for resolution. I can share the full policy document.', createdAt: '2025-04-22T10:00:00Z' },
+      { id: 'c5', authorId: '3', content: 'SLA is 99.5% uptime, 4-hour MTTR. Full document in Confluence under Procurement > Service Agreements.', createdAt: '2025-04-22T10:00:00Z' },
     ],
     createdAt: '2025-04-21T11:00:00Z',
   },
@@ -241,52 +444,64 @@ export const mockInsightPosts: InsightPost[] = [
 export const mockIssueTickets: IssueTicket[] = [
   {
     id: '1',
-    title: 'Authentication timeout errors during peak hours',
-    description: 'Multiple customers experiencing session timeouts during 10-12 PM rush. Average timeout occurs after 5 minutes of inactivity.',
+    title: 'Telebirr payment webhook not firing in production',
+    description: 'Payment confirmations from Telebirr are not triggering webhooks in production. Customers are not receiving payment confirmations. Sandbox works fine.',
     status: 'Open',
-    priority: 'High',
-    category: 'IT',
+    priority: 'Critical',
+    category: 'FinTech',
     reportedById: '1',
     assignedToId: '5',
     createdAt: '2025-04-20T10:30:00Z',
     updatedAt: '2025-04-22T09:00:00Z',
+    rootCause: 'Under investigation',
+    preventativeMeasures: '',
+    postMortemGenerated: false,
   },
   {
     id: '2',
-    title: 'Missing signature field on business registration form',
-    description: 'The digital form V12.3 is missing the mandatory authorized signature field. Applications are being submitted incomplete.',
+    title: 'Ministry of Revenue e-Tax API returning 500 errors',
+    description: 'The e-Tax portal API is returning intermittent 500 errors during business hours (9 AM - 12 PM). Affecting all taxpayer registration flows.',
     status: 'In Progress',
-    priority: 'Critical',
-    category: 'Process',
+    priority: 'High',
+    category: 'Government',
     reportedById: '2',
-    assignedToId: '4',
+    assignedToId: '5',
     createdAt: '2025-04-19T14:00:00Z',
     updatedAt: '2025-04-22T11:30:00Z',
+    rootCause: 'Database connection pool exhaustion',
+    preventativeMeasures: 'Implement connection pooling and query optimization',
+    postMortemGenerated: false,
   },
   {
     id: '3',
-    title: 'Printer paper jam in Window 3',
-    description: 'HP LaserJet at Window 3 has recurring paper jam issues. Technical team replaced rollers but problem persists.',
+    title: 'Ethio Telecom SMS delivery delay exceeding 5 minutes',
+    description: 'SMS messages sent via Ethio Telecom are experiencing 5-10 minute delays. Affecting OTP and notification delivery.',
     status: 'Resolved',
     priority: 'Medium',
-    category: 'Equipment',
+    category: 'Infrastructure',
     reportedById: '1',
     assignedToId: '5',
-    resolutionNotes: 'Replaced entire printer unit. New unit working correctly for 2 weeks now.',
+    resolutionNotes: 'Root cause was network congestion during peak hours. Implemented SMS queuing with priority handling. Ethio Telecom confirmed infrastructure upgrade scheduled for next month.',
     createdAt: '2025-04-10T09:00:00Z',
     updatedAt: '2025-04-18T15:00:00Z',
+    rootCause: 'Peak hour network congestion on Ethio Telecom side',
+    preventativeMeasures: 'Implemented SMS queue with priority levels; scheduled retry for failed messages; monitoring dashboard created',
+    postMortemGenerated: true,
   },
   {
     id: '4',
-    title: 'Waiting area temperature too cold in mornings',
-    description: 'Citizens complain about cold waiting area especially before 10 AM. AC thermostat seems to be set too low.',
+    title: 'Kebele ID format validation failing for Oromia region IDs',
+    description: 'Oromia region kebele IDs have a different format than Addis Ababa. Current validation is rejecting valid Oromia IDs.',
     status: 'Open',
-    priority: 'Low',
-    category: 'Facilities',
+    priority: 'Medium',
+    category: 'Integration',
     reportedById: '1',
-    assignedToId: '6',
+    assignedToId: '2',
     createdAt: '2025-04-21T08:30:00Z',
     updatedAt: '2025-04-21T08:30:00Z',
+    rootCause: 'Oromia uses region prefix OR followed by different number sequence',
+    preventativeMeasures: '',
+    postMortemGenerated: false,
   },
 ];
 
@@ -295,53 +510,56 @@ export const mockOffboardingRecords: OffboardingRecord[] = [
     id: '1',
     employeeId: 'ex-1',
     employeeName: 'Meron Tadesse',
-    department: 'Customer Service',
+    department: 'Integration',
     lastWorkingDay: '2025-03-28',
     interviewDate: '2025-03-25',
     interviewerId: '3',
-    unwrittenRules: 'Morning briefings set the tone for the day. Always check the whiteboard for daily targets. The senior staff takes lunch at 12:30 - try not to interrupt. Thursday afternoons are for cross-training.',
-    institutionalKnowledge: 'The key to handling angry customers is to never match their energy. Use the calm-down phrase: "Let me help you resolve this." Most issues can be solved by checking the legacy system first - the new system sometimes lags.',
+    unwrittenRules: 'The Ministry of Revenue staging environment credentials are stored in LastPass under "MOR-Staging-Legacy". Always test against staging before production - the production API keys rotate monthly on the 1st. The e-Tax team communicates via Telegram channel #etax-integration.',
+    institutionalKnowledge: 'The e-Tax legacy SOAP endpoint will be deprecated December 2025. New REST endpoint is ready but requires ministry sign-off. Kebele ID API has a known issue where regional servers sync overnight - avoid critical integrations at 6 AM EAT.',
     keyContacts: [
-      { name: 'Daniel Kebede', role: 'Operations Lead', email: 'daniel.kebede@a-mesob.et', notes: 'Go-to for all process questions' },
-      { name: 'Girma Hailu', role: 'Legacy System Admin', email: 'girma.hailu@a-mesob.et', phone: '+251-911-XXX-XXXX', notes: 'Only person who knows the old database' },
+      { name: 'Abraham Tesfaye', role: 'MOR Technical Lead', email: 'abraham.tesfaye@mora.gov.et', notes: 'Primary contact for e-Tax API issues' },
+      { name: 'Fitsum Girma', role: 'Ministry Network Admin', email: 'fitsum.girma@moc.gov.et', phone: '+251-911-XXX-XXXX', notes: 'Only person who can whitelist IPs for ministry APIs' },
     ],
-    processMapUrl: '/processes/customer-service-workflow',
+    processMapUrl: '/processes/ministry-api-onboarding',
     knowledgeTransferStatus: 'completed',
-    exitInterviewNotes: 'Meron was instrumental in onboarding 3 junior staff. Her notes on customer handling have been documented.',
+    exitInterviewNotes: 'Meron was instrumental in the Telebirr integration. Her walkthrough videos for payment gateway debugging are in Google Drive.',
     createdAt: '2025-03-25T10:00:00Z',
+    digitalAssetsOwned: ['Telebirr API Production Keys', 'e-Tax SOAP Integration Module', 'CBE Payment Gateway v2.1'],
+    walkthroughVideoUrl: 'https://drive.google.com/drive/meron-payment-debug',
   },
   {
     id: '2',
     employeeId: 'ex-2',
     employeeName: 'Kibret Solomon',
-    department: 'IT',
+    department: 'DevOps',
     lastWorkingDay: '2025-04-15',
     interviewDate: '2025-04-10',
     interviewerId: '3',
-    unwrittenRules: 'System maintenance windows are Tuesday and Friday nights after 8 PM. Always announce downtime 24 hours in advance in the lobby and on the website. Never deploy on Fridays.',
-    institutionalKnowledge: 'The backup system runs on custom scripts that Kibret wrote. Documentation exists but is incomplete. The vendor (EthioTech Solutions) relationship is managed by Frehiwot - new IT lead should shadow her first.',
+    unwrittenRules: 'Ethio Telecom production credentials rotate quarterly - next rotation is June 1st. The AWS Ethiopia region (af-east-1) has different IAM policies than global. Kubernetes cluster upgrade nights are every other Thursday after 10 PM EAT.',
+    institutionalKnowledge: 'The backup scripts for Ministry of Revenue data run via cron on the db-backup server. The Telebirr gateway monitoring is done through Datadog dashboard "Telebirr Health v2". Prometheus alerts fire to #ops-alerts Slack channel.',
     keyContacts: [
-      { name: 'Frehiwot Worku', role: 'IT Manager', email: 'frehiwot.worku@a-mesob.et', notes: 'Primary vendor contact' },
-      { name: 'Yonas Mesfin', role: 'EthioTech Support', email: 'support@ethiotech.et', phone: '+251-11-XXX-XXXX', notes: 'Vendor escalation' },
+      { name: 'Frehiwot Worku', role: 'DevOps Lead', email: 'frehiwot.worku@a-mesob.et', notes: 'Primary ops contact' },
+      { name: 'Yonas Mesfin', role: 'Ethio Telecom B2B Support', email: 'b2b@ethiotelecom.et', phone: '+251-11-XXX-XXXX', notes: 'Escalation for SMS/USSD issues' },
     ],
     knowledgeTransferStatus: 'in-progress',
-    exitInterviewNotes: 'Exit interview scheduled for April 10. Knowledge transfer session scheduled for April 12.',
+    exitInterviewNotes: 'Exit interview scheduled for April 10. Knowledge transfer session scheduled for April 12. All AWS credentials to be rotated April 16.',
     createdAt: '2025-04-10T14:00:00Z',
+    digitalAssetsOwned: ['AWS Root Account (emergency only)', 'Kubernetes Admin Config', 'Ethio Telecom Production Credentials', 'Datadog Admin Access'],
   },
 ];
 
 export const mockLearningPathways: LearningPathway[] = [
   {
     id: '1',
-    title: 'Customer Service Excellence',
-    description: 'Master the fundamentals of delivering exceptional government service to Ethiopian citizens.',
-    category: 'Customer Service',
+    title: 'Government API Integration Fundamentals',
+    description: 'Master integration with Ethiopian government ministry APIs including Kebele ID, e-Tax, and E-Passport.',
+    category: 'Integration',
     modules: [
-      { id: 'm1', title: 'Introduction to Public Service', description: 'Understanding our mission and values', duration: '1 hour', order: 1 },
-      { id: 'm2', title: 'Citizen Interaction Basics', description: 'First impressions and communication skills', duration: '2 hours', order: 2 },
-      { id: 'm3', title: 'Document Verification', description: 'Authenticating government documents', duration: '3 hours', order: 3 },
-      { id: 'm4', title: 'Handling Difficult Situations', description: 'De-escalation and conflict resolution', duration: '2 hours', order: 4 },
-      { id: 'm5', title: 'Digital System Navigation', description: 'Using our service delivery platforms', duration: '2 hours', order: 5 },
+      { id: 'm1', title: 'Understanding Ethiopian Government Systems', description: 'Overview of ministry structure and API ecosystems', duration: '2 hours', order: 1 },
+      { id: 'm2', title: 'REST API Best Practices', description: 'Authentication, rate limiting, and error handling', duration: '3 hours', order: 2 },
+      { id: 'm3', title: 'Kebele ID Integration', description: 'Real-time citizen identity verification', duration: '4 hours', order: 3 },
+      { id: 'm4', title: 'e-Tax Portal Integration', description: 'Taxpayer registration and compliance APIs', duration: '3 hours', order: 4 },
+      { id: 'm5', title: 'E-Passport API Integration', description: 'Passport application and status tracking', duration: '2 hours', order: 5 },
     ],
     requiredForRoles: ['junior'],
     progress: 'in-progress',
@@ -349,27 +567,27 @@ export const mockLearningPathways: LearningPathway[] = [
   },
   {
     id: '2',
-    title: 'IT Infrastructure Essentials',
-    description: 'Learn to manage and troubleshoot our digital infrastructure.',
-    category: 'IT',
+    title: 'FinTech Payment Gateway Integration',
+    description: 'Learn to integrate Telebirr, CBE, and commercial bank payment systems.',
+    category: 'FinTech',
     modules: [
-      { id: 'm6', title: 'Network Fundamentals', description: 'Understanding our network architecture', duration: '3 hours', order: 1 },
-      { id: 'm7', title: 'Security Protocols', description: 'Keeping citizen data safe', duration: '2 hours', order: 2 },
-      { id: 'm8', title: 'Troubleshooting Basics', description: 'Common issues and solutions', duration: '4 hours', order: 3 },
+      { id: 'm6', title: 'Telebirr API Deep Dive', description: 'Mobile money payment integration patterns', duration: '4 hours', order: 1 },
+      { id: 'm7', title: 'Bank Reconciliation', description: 'Payment matching and dispute resolution', duration: '3 hours', order: 2 },
+      { id: 'm8', title: 'Idempotency & Security', description: 'Preventing duplicate charges and fraud', duration: '2 hours', order: 3 },
     ],
     requiredForRoles: ['junior'],
     progress: 'not-started',
   },
   {
     id: '3',
-    title: 'Team Leadership Fundamentals',
-    description: 'Skills and knowledge for aspiring team leads and supervisors.',
-    category: 'Leadership',
+    title: 'DevOps & Infrastructure Excellence',
+    description: 'Skills for managing Ethiopian digital infrastructure.',
+    category: 'DevOps',
     modules: [
-      { id: 'm9', title: 'Leadership Principles', description: 'Core leadership concepts for government services', duration: '2 hours', order: 1 },
-      { id: 'm10', title: 'Performance Management', description: 'Evaluating and developing team members', duration: '3 hours', order: 2 },
-      { id: 'm11', title: 'Conflict Resolution', description: 'Managing team dynamics', duration: '2 hours', order: 3 },
-      { id: 'm12', title: 'Resource Allocation', description: 'Optimizing team productivity', duration: '2 hours', order: 4 },
+      { id: 'm9', title: 'AWS Ethiopia Region Operations', description: 'Managing infrastructure on af-east-1', duration: '3 hours', order: 1 },
+      { id: 'm10', title: 'Ethio Telecom Integration', description: 'SMS, USSD, and connectivity management', duration: '4 hours', order: 2 },
+      { id: 'm11', title: 'Incident Response Playbooks', description: 'Government service outage handling', duration: '2 hours', order: 3 },
+      { id: 'm12', title: 'Post-Mortem Writing', description: 'Creating effective post-mortem documentation', duration: '2 hours', order: 4 },
     ],
     requiredForRoles: ['senior'],
     progress: 'completed',
@@ -380,27 +598,27 @@ export const mockLearningPathways: LearningPathway[] = [
 export const mockNotifications: Notification[] = [
   {
     id: 'n1',
-    type: 'info',
-    title: 'New article published',
-    message: 'Daniel published "Digital Service Integration Guidelines for Addis Ababa"',
+    type: 'warning',
+    title: 'Telebirr webhook issue',
+    message: 'Production webhook failures detected - investigating root cause',
     read: false,
     createdAt: '2025-04-22T09:00:00Z',
-    link: '/knowledge-base',
+    link: '/issues',
   },
   {
     id: 'n2',
-    type: 'warning',
-    title: 'Issue requires attention',
-    message: 'Authentication timeout errors ticket is still open',
+    type: 'info',
+    title: 'New article published',
+    message: 'Daniel published "Ministry of Revenue e-Tax Portal Data Migration"',
     read: false,
     createdAt: '2025-04-22T08:00:00Z',
-    link: '/issues',
+    link: '/knowledge-base',
   },
   {
     id: 'n3',
     type: 'mention',
     title: 'You were mentioned',
-    message: 'Samuel mentioned you in "Elderly Customers" discussion',
+    message: 'Samuel mentioned you in "Kebele ID validation" discussion',
     read: false,
     createdAt: '2025-04-21T14:30:00Z',
     link: '/community',
@@ -408,10 +626,36 @@ export const mockNotifications: Notification[] = [
   {
     id: 'n4',
     type: 'success',
-    title: 'Learning milestone',
-    message: 'You completed "Document Authentication" module',
+    title: 'Skill completed',
+    message: 'You completed "REST API Best Practices" module',
     read: true,
     createdAt: '2025-04-20T16:00:00Z',
     link: '/learning',
+  },
+];
+
+export const mockQMSFeedback: QMSFeedback[] = [
+  {
+    id: 'qms-1',
+    source: 'E-Passport Portal',
+    citizenFailureRate: 23.5,
+    issueDescription: 'Citizens repeatedly failing photo upload due to unclear size requirements and timezone confusion on appointment scheduling.',
+    knowledgeGapTicketId: 'KB-1',
+    createdAt: '2025-04-20T10:00:00Z',
+  },
+  {
+    id: 'qms-2',
+    source: 'Telebirr Gateway',
+    citizenFailureRate: 8.2,
+    issueDescription: 'Payment timeout messages are confusing. Citizens don\'t understand if payment failed or is pending.',
+    createdAt: '2025-04-19T14:00:00Z',
+  },
+  {
+    id: 'qms-3',
+    source: 'Ministry of Revenue e-Tax',
+    citizenFailureRate: 31.0,
+    issueDescription: 'High failure rate on TIN validation. Legacy TINs have inconsistent formats across regions.',
+    knowledgeGapTicketId: 'ticket-2',
+    createdAt: '2025-04-18T09:00:00Z',
   },
 ];

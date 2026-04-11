@@ -1,5 +1,5 @@
 export type UserRole = 'junior' | 'senior' | 'admin';
-export type Department = 'Customer Service' | 'Operations' | 'IT' | 'HR' | 'Finance' | 'Quality Assurance';
+export type Department = 'Integration' | 'DevOps' | 'Security' | 'Product' | 'Finance' | 'Quality Assurance';
 
 export interface Skill {
   name: string;
@@ -20,7 +20,7 @@ export interface User {
   bio?: string;
 }
 
-export type ArticleCategory = 'HR Policies' | 'IT Procedures' | 'Quality Guidelines' | 'Onboarding' | 'Process Documentation';
+export type ArticleCategory = 'Government Integrations' | 'FinTech & Payment Gateways' | 'Digital Infrastructure';
 
 export interface KnowledgeArticle {
   id: string;
@@ -55,6 +55,9 @@ export interface InsightPost {
   hasUpvoted: boolean;
   comments: Comment[];
   createdAt: string;
+  codeSnippet?: string;
+  language?: string;
+  isVerifiedSolution: boolean;
 }
 
 export type IssueStatus = 'Open' | 'In Progress' | 'Resolved' | 'Closed';
@@ -72,6 +75,9 @@ export interface IssueTicket {
   resolutionNotes?: string;
   createdAt: string;
   updatedAt: string;
+  rootCause?: string;
+  preventativeMeasures?: string;
+  postMortemGenerated: boolean;
 }
 
 export interface KeyContact {
@@ -97,6 +103,8 @@ export interface OffboardingRecord {
   knowledgeTransferStatus: 'pending' | 'in-progress' | 'completed';
   exitInterviewNotes?: string;
   createdAt: string;
+  digitalAssetsOwned: string[];
+  walkthroughVideoUrl?: string;
 }
 
 export type LearningPathwayStatus = 'not-started' | 'in-progress' | 'completed';
@@ -129,4 +137,13 @@ export interface Notification {
   read: boolean;
   createdAt: string;
   link?: string;
+}
+
+export interface QMSFeedback {
+  id: string;
+  source: string;
+  citizenFailureRate: number;
+  issueDescription: string;
+  knowledgeGapTicketId?: string;
+  createdAt: string;
 }

@@ -10,6 +10,7 @@ import {
   Notification,
   Comment,
   UserRole,
+  QMSFeedback,
 } from '@/types';
 import {
   mockUsers,
@@ -19,6 +20,7 @@ import {
   mockOffboardingRecords,
   mockLearningPathways,
   mockNotifications,
+  mockQMSFeedback,
 } from './data';
 
 interface AppState {
@@ -30,6 +32,7 @@ interface AppState {
   offboardingRecords: OffboardingRecord[];
   learningPathways: LearningPathway[];
   notifications: Notification[];
+  qmsFeedback: QMSFeedback[];
 
   setCurrentUser: (user: User | null) => void;
   switchRole: (role: UserRole) => void;
@@ -38,12 +41,13 @@ interface AppState {
   updateArticle: (id: string, updates: Partial<KnowledgeArticle>) => void;
   deleteArticle: (id: string) => void;
   
-  addInsightPost: (post: Omit<InsightPost, 'id' | 'createdAt' | 'upvotes' | 'hasUpvoted' | 'comments'>) => void;
+  addInsightPost: (post: Omit<InsightPost, 'id' | 'createdAt' | 'upvotes' | 'hasUpvoted' | 'comments' | 'isVerifiedSolution'>) => void;
   toggleUpvote: (postId: string) => void;
   addComment: (postId: string, content: string) => void;
+  verifySolution: (postId: string) => void;
   
-  addIssueTicket: (ticket: Omit<IssueTicket, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  updateTicketStatus: (id: string, status: IssueTicket['status'], resolutionNotes?: string) => void;
+  addIssueTicket: (ticket: Omit<IssueTicket, 'id' | 'createdAt' | 'updatedAt' | 'postMortemGenerated'>) => void;
+  updateTicketStatus: (id: string, status: IssueTicket['status'], resolutionNotes?: string, rootCause?: string, preventativeMeasures?: string) => void;
   
   addOffboardingRecord: (record: Omit<OffboardingRecord, 'id' | 'createdAt'>) => void;
   updateOffboardingStatus: (id: string, status: OffboardingRecord['knowledgeTransferStatus']) => void;
@@ -53,6 +57,8 @@ interface AppState {
   
   enrollInPathway: (pathwayId: string) => void;
   completeModule: (pathwayId: string, moduleId: string) => void;
+  
+  addQMSFeedback: (feedback: Omit<QMSFeedback, 'id' | 'createdAt'>) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -66,6 +72,7 @@ export const useAppStore = create<AppState>()(
       offboardingRecords: mockOffboardingRecords,
       learningPathways: mockLearningPathways,
       notifications: mockNotifications,
+      qmsFeedback: mockQMSFeedback,
 
       setCurrentUser: (user) => set({ currentUser: user }),
 
@@ -112,6 +119,7 @@ export const useAppStore = create<AppState>()(
           upvotes: 0,
           hasUpvoted: false,
           comments: [],
+          isVerifiedSolution: false,
         };
         set((state) => ({
           insightPosts: [newPost, ...state.insightPosts],
@@ -152,19 +160,30 @@ export const useAppStore = create<AppState>()(
         }));
       },
 
+      verifySolution: (postId) => {
+        set((state) => ({
+          insightPosts: state.insightPosts.map((post) =>
+            post.id === postId
+              ? { ...post, isVerifiedSolution: true }
+              : post
+          ),
+        }));
+      },
+
       addIssueTicket: (ticket) => {
         const newTicket: IssueTicket = {
           ...ticket,
           id: `ticket-${Date.now()}`,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          postMortemGenerated: false,
         };
         set((state) => ({
           issueTickets: [newTicket, ...state.issueTickets],
         }));
       },
 
-      updateTicketStatus: (id, status, resolutionNotes) => {
+      updateTicketStatus: (id, status, resolutionNotes, rootCause, preventativeMeasures) => {
         set((state) => ({
           issueTickets: state.issueTickets.map((ticket) =>
             ticket.id === id
@@ -172,6 +191,9 @@ export const useAppStore = create<AppState>()(
                   ...ticket,
                   status,
                   resolutionNotes: resolutionNotes || ticket.resolutionNotes,
+                  rootCause: rootCause || ticket.rootCause,
+                  preventativeMeasures: preventativeMeasures || ticket.preventativeMeasures,
+                  postMortemGenerated: status === 'Resolved',
                   updatedAt: new Date().toISOString(),
                 }
               : ticket
@@ -235,6 +257,17 @@ export const useAppStore = create<AppState>()(
               completedAt: allCompleted ? new Date().toISOString() : undefined,
             };
           }),
+        }));
+      },
+
+      addQMSFeedback: (feedback) => {
+        const newFeedback: QMSFeedback = {
+          ...feedback,
+          id: `qms-${Date.now()}`,
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          qmsFeedback: [newFeedback, ...state.qmsFeedback],
         }));
       },
     }),
