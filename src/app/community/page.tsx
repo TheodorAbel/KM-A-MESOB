@@ -9,76 +9,143 @@ import { InsightType } from '@/types';
 
 type FilterType = 'All' | InsightType;
 
-const filters: { type: FilterType; label: string; emoji: string }[] = [
-  { type: 'All', label: 'All Posts', emoji: '📋' },
-  { type: 'Insight', label: 'Insights', emoji: '💡' },
-  { type: 'Challenge', label: 'Challenges', emoji: '⚠️' },
-  { type: 'Lesson Learned', label: 'Lessons', emoji: '📘' },
-  { type: 'Question', label: 'Questions', emoji: '❓' },
+const filters: { type: FilterType; label: string; emoji: string; color: string }[] = [
+  { type: 'All', label: 'All Posts', emoji: '📋', color: 'bg-slate-100 text-slate-700' },
+  { type: 'Insight', label: 'Insights', emoji: '💡', color: 'bg-green-100 text-green-700' },
+  { type: 'Challenge', label: 'Challenges', emoji: '⚠️', color: 'bg-amber-100 text-amber-700' },
+  { type: 'Lesson Learned', label: 'Lessons', emoji: '📘', color: 'bg-blue-100 text-blue-700' },
+  { type: 'Question', label: 'Questions', emoji: '❓', color: 'bg-purple-100 text-purple-700' },
+];
+
+const sortOptions = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'votes', label: 'Most Votes' },
+  { value: 'unanswered', label: 'Unanswered' },
 ];
 
 export default function CommunityPage() {
   const { insightPosts } = useAppStore();
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
+  const [sortBy, setSortBy] = useState('newest');
   const [refreshKey, setRefreshKey] = useState(0);
 
   const filteredPosts = useMemo(() => {
     let posts = [...insightPosts];
+    
     if (activeFilter !== 'All') {
       posts = posts.filter((p) => p.type === activeFilter);
     }
-    return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [insightPosts, activeFilter, refreshKey]);
+    
+    if (sortBy === 'newest') {
+      posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (sortBy === 'votes') {
+      posts.sort((a, b) => b.upvotes - a.upvotes);
+    } else if (sortBy === 'unanswered') {
+      posts = posts.filter((p) => p.comments.length === 0);
+      posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+    
+    return posts;
+  }, [insightPosts, activeFilter, sortBy, refreshKey]);
 
   const handlePostCreated = () => {
     setRefreshKey((k) => k + 1);
   };
 
+  const questionCount = insightPosts.filter((p) => p.type === 'Question').length;
+  const answeredCount = insightPosts.filter((p) => p.type === 'Question' && p.verifiedCommentId).length;
+  const insightCount = insightPosts.filter((p) => p.type === 'Insight' || p.type === 'Challenge' || p.type === 'Lesson Learned').length;
+
   return (
     <AppShell>
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-slate-800">Community Board</h1>
-          <p className="text-slate-500 mt-1">
-            Share insights, challenges, and lessons learned with your team
-          </p>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+              <span>💬</span>
+              Solutions & Snippets Hub
+            </h1>
+            <p className="text-slate-500 mt-1">
+              Technical Q&A, insights, and code snippets from the A-Mesob team
+            </p>
+          </div>
         </div>
 
+        {/* Stats Bar */}
+        <div className="flex flex-wrap gap-4">
+          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200">
+            <span className="text-lg">❓</span>
+            <span className="text-sm text-slate-600">{questionCount} Questions</span>
+            <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+              {answeredCount} answered
+            </span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200">
+            <span className="text-lg">💡</span>
+            <span className="text-sm text-slate-600">{insightCount} Insights & Lessons</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200">
+            <span className="text-lg">📝</span>
+            <span className="text-sm text-slate-600">{insightPosts.reduce((acc, p) => acc + p.comments.length, 0)} Answers</span>
+          </div>
+        </div>
+
+        {/* Create Post */}
         <CreatePost onPostCreated={handlePostCreated} />
 
-        <div className="bg-white rounded-xl border border-slate-200 p-2">
-          <div className="flex gap-2 overflow-x-auto pb-1">
+        {/* Filters & Sort */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white rounded-xl border border-slate-200 p-4">
+          <div className="flex flex-wrap gap-2">
             {filters.map((filter) => (
               <button
                 key={filter.type}
                 onClick={() => setActiveFilter(filter.type)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   activeFilter === filter.type
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? filter.color + ' ring-2 ring-offset-1 ring-slate-300'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
                 {filter.emoji} {filter.label}
               </button>
             ))}
           </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-500">Sort by:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {sortOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
+        {/* Posts List */}
         <div className="space-y-4">
           {filteredPosts.length === 0 ? (
-            <div className="bg-white rounded-xl border border-slate-200 p-8 text-center">
-              <div className="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+            <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+              <div className="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-lg font-medium text-slate-700">No posts yet</p>
-              <p className="text-slate-500 mt-1">Be the first to share an insight!</p>
+              <p className="text-lg font-medium text-slate-700">No posts found</p>
+              <p className="text-slate-500 mt-1">Be the first to {activeFilter === 'Question' ? 'ask a question' : 'share an insight'}!</p>
             </div>
           ) : (
-            filteredPosts.map((post) => (
-              <InsightCard key={post.id} post={post} />
-            ))
+            <>
+              <div className="text-sm text-slate-500">
+                {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
+              </div>
+              {filteredPosts.map((post) => (
+                <InsightCard key={post.id} post={post} />
+              ))}
+            </>
           )}
         </div>
       </div>

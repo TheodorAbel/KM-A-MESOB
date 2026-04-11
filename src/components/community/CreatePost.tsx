@@ -16,13 +16,28 @@ const postTypes: { type: InsightType; label: string; color: string; bgColor: str
   { type: 'Question', label: '❓ Question', color: 'text-slate-700', bgColor: 'bg-slate-100' },
 ];
 
+const languages = [
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'python', label: 'Python' },
+  { value: 'bash', label: 'Bash' },
+  { value: 'json', label: 'JSON' },
+  { value: 'yaml', label: 'YAML' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'go', label: 'Go' },
+  { value: 'java', label: 'Java' },
+  { value: 'other', label: 'Other' },
+];
+
 export function CreatePost({ onPostCreated }: CreatePostProps) {
   const { addInsightPost, currentUser } = useAppStore();
   const { user } = useAuth();
   const [isExpanded, setIsExpanded] = useState(false);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
-  const [selectedType, setSelectedType] = useState<InsightType>('Insight');
+  const [selectedType, setSelectedType] = useState<InsightType>('Question');
+  const [codeSnippet, setCodeSnippet] = useState('');
+  const [language, setLanguage] = useState('typescript');
 
   const handleSubmit = () => {
     if (!content.trim() || !title.trim() || !currentUser) return;
@@ -32,11 +47,15 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
       content: content.trim(),
       title: title.trim(),
       type: selectedType,
+      codeSnippet: codeSnippet.trim() || undefined,
+      language: codeSnippet.trim() ? language : undefined,
     });
 
     setContent('');
     setTitle('');
-    setSelectedType('Insight');
+    setSelectedType('Question');
+    setCodeSnippet('');
+    setLanguage('typescript');
     setIsExpanded(false);
     onPostCreated();
   };
@@ -56,7 +75,7 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              placeholder="Share an insight, challenge, or lesson learned..."
+              placeholder="Ask a question or share a technical insight..."
               className="w-full px-4 py-2.5 bg-slate-100 border border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition-all"
             />
             
@@ -65,13 +84,43 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="Describe your insight in detail..."
+                  placeholder="Describe your question or insight in detail..."
                   rows={4}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 />
 
+                {/* Code Snippet Section */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    Code Snippet / JSON Payload (optional)
+                  </label>
+                  <div className="grid grid-cols-4 gap-2">
+                    <select
+                      value={language}
+                      onChange={(e) => setLanguage(e.target.value)}
+                      className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    >
+                      {languages.map((lang) => (
+                        <option key={lang.value} value={lang.value}>{lang.label}</option>
+                      ))}
+                    </select>
+                    <div className="col-span-3">
+                      <input
+                        type="text"
+                        value={codeSnippet}
+                        onChange={(e) => setCodeSnippet(e.target.value)}
+                        placeholder="Paste your code snippet here..."
+                        className="w-full px-3 py-2 bg-slate-900 text-slate-100 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div>
-                  <p className="text-sm font-medium text-slate-700 mb-2">Post Type (required)</p>
+                  <p className="text-sm font-medium text-slate-700 mb-2">Post Type</p>
                   <div className="flex flex-wrap gap-2">
                     {postTypes.map((pt) => (
                       <button
@@ -95,6 +144,7 @@ export function CreatePost({ onPostCreated }: CreatePostProps) {
                       setIsExpanded(false);
                       setContent('');
                       setTitle('');
+                      setCodeSnippet('');
                     }}
                     className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium transition-colors"
                   >

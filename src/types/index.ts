@@ -46,6 +46,7 @@ export interface Comment {
   authorId: string;
   content: string;
   createdAt: string;
+  isVerified?: boolean;
 }
 
 export interface InsightPost {
@@ -61,6 +62,7 @@ export interface InsightPost {
   codeSnippet?: string;
   language?: string;
   isVerifiedSolution: boolean;
+  verifiedCommentId?: string;
 }
 
 export type IssueStatus = 'Open' | 'In Progress' | 'Resolved' | 'Closed';

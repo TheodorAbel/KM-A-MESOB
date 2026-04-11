@@ -47,6 +47,7 @@ interface AppState {
   toggleUpvote: (postId: string) => void;
   addComment: (postId: string, content: string) => void;
   verifySolution: (postId: string) => void;
+  verifyComment: (postId: string, commentId: string) => void;
   
   addIssueTicket: (ticket: Omit<IssueTicket, 'id' | 'createdAt' | 'updatedAt' | 'postMortemGenerated'>) => void;
   updateTicketStatus: (id: string, status: IssueTicket['status'], resolutionNotes?: string, rootCause?: string, preventativeMeasures?: string) => void;
@@ -189,6 +190,22 @@ export const useAppStore = create<AppState>()(
               ? { ...post, isVerifiedSolution: true }
               : post
           ),
+        }));
+      },
+
+      verifyComment: (postId, commentId) => {
+        set((state) => ({
+          insightPosts: state.insightPosts.map((post) => {
+            if (post.id !== postId) return post;
+            return {
+              ...post,
+              verifiedCommentId: commentId,
+              comments: post.comments.map((c) => ({
+                ...c,
+                isVerified: c.id === commentId,
+              })),
+            };
+          }),
         }));
       },
 
