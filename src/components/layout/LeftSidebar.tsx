@@ -17,9 +17,9 @@ interface NavSection {
 
 const kbCategories = [
   { label: 'All Articles', href: '/knowledge-base', category: undefined as undefined },
-  { label: 'HR Policies', href: '/knowledge-base?category=HR%20Policies', category: 'HR Policies' as ArticleCategory },
-  { label: 'IT Procedures', href: '/knowledge-base?category=IT%20Procedures', category: 'IT Procedures' as ArticleCategory },
-  { label: 'Quality Guidelines', href: '/knowledge-base?category=Quality%20Guidelines', category: 'Quality Guidelines' as ArticleCategory },
+  { label: 'Government Integrations', href: '/knowledge-base?category=Government%20Integrations', category: 'Government Integrations' as ArticleCategory },
+  { label: 'FinTech & Payments', href: '/knowledge-base?category=FinTech%20%26%20Payment%20Gateways', category: 'FinTech & Payment Gateways' as ArticleCategory },
+  { label: 'Digital Infrastructure', href: '/knowledge-base?category=Digital%20Infrastructure', category: 'Digital Infrastructure' as ArticleCategory },
 ];
 
 const navSections: NavSection[] = [
@@ -70,6 +70,16 @@ const navSections: NavSection[] = [
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'qms-feedback',
+    label: 'Citizen Impact (QMS)',
+    href: '/qms-feedback',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
       </svg>
     ),
   },
