@@ -152,3 +152,28 @@ export interface QMSFeedback {
   knowledgeGapTicketId?: string;
   createdAt: string;
 }
+
+export interface ShadowRequest {
+  id: string;
+  juniorId: string;
+  seniorId: string;
+  skillId: string;
+  skillName: string;
+  proposedDate?: string;
+  proposedTime?: string;
+  message?: string;
+  status: 'pending' | 'accepted' | 'completed' | 'declined';
+  createdAt: string;
+  completedAt?: string;
+}
+
+export interface MentorshipNote {
+  id: string;
+  mentorId: string;
+  menteeId: string;
+  skillId: string;
+  skillName: string;
+  note: string;
+  rating?: number;
+  createdAt: string;
+}

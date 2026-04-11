@@ -11,6 +11,8 @@ import {
   Comment,
   UserRole,
   QMSFeedback,
+  ShadowRequest,
+  MentorshipNote,
 } from '@/types';
 import {
   mockUsers,
@@ -33,6 +35,8 @@ interface AppState {
   learningPathways: LearningPathway[];
   notifications: Notification[];
   qmsFeedback: QMSFeedback[];
+  shadowRequests: ShadowRequest[];
+  mentorshipNotes: MentorshipNote[];
 
   setCurrentUser: (user: User | null) => void;
   switchRole: (role: UserRole) => void;
@@ -62,6 +66,11 @@ interface AppState {
   completeModule: (pathwayId: string, moduleId: string) => void;
   
   addQMSFeedback: (feedback: Omit<QMSFeedback, 'id' | 'createdAt'>) => void;
+  
+  createShadowRequest: (request: Omit<ShadowRequest, 'id' | 'createdAt' | 'status'>) => void;
+  updateShadowRequestStatus: (id: string, status: ShadowRequest['status']) => void;
+  
+  addMentorshipNote: (note: Omit<MentorshipNote, 'id' | 'createdAt'>) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -76,6 +85,32 @@ export const useAppStore = create<AppState>()(
       learningPathways: mockLearningPathways,
       notifications: mockNotifications,
       qmsFeedback: mockQMSFeedback,
+      shadowRequests: [
+        {
+          id: 'sr-1',
+          juniorId: '1',
+          seniorId: '2',
+          skillId: 'sup-1',
+          skillName: 'E-Tax API Integration',
+          proposedDate: '2025-04-25',
+          proposedTime: '14:00',
+          message: 'Would like to pair program on the e-Tax portal integration. I\'ve read the docs but need hands-on guidance.',
+          status: 'pending',
+          createdAt: '2025-04-20T10:00:00Z',
+        },
+      ],
+      mentorshipNotes: [
+        {
+          id: 'mn-1',
+          mentorId: '2',
+          menteeId: '1',
+          skillId: 'dept-1',
+          skillName: 'Ministry API Integration',
+          note: 'Bethel showed excellent initiative in researching the Kebele ID API. She understood the authentication flow quickly and was able to implement a basic integration within the session. Recommend she practice with the staging environment before touching production.',
+          rating: 5,
+          createdAt: '2025-04-15T16:00:00Z',
+        },
+      ],
 
       setCurrentUser: (user) => set({ currentUser: user }),
 
@@ -307,6 +342,39 @@ export const useAppStore = create<AppState>()(
         };
         set((state) => ({
           qmsFeedback: [newFeedback, ...state.qmsFeedback],
+        }));
+      },
+
+      createShadowRequest: (request) => {
+        const newRequest: ShadowRequest = {
+          ...request,
+          id: `shadow-${Date.now()}`,
+          status: 'pending',
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          shadowRequests: [newRequest, ...state.shadowRequests],
+        }));
+      },
+
+      updateShadowRequestStatus: (id, status) => {
+        set((state) => ({
+          shadowRequests: state.shadowRequests.map((req) =>
+            req.id === id
+              ? { ...req, status, completedAt: status === 'completed' ? new Date().toISOString() : undefined }
+              : req
+          ),
+        }));
+      },
+
+      addMentorshipNote: (note) => {
+        const newNote: MentorshipNote = {
+          ...note,
+          id: `mentorship-${Date.now()}`,
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          mentorshipNotes: [newNote, ...state.mentorshipNotes],
         }));
       },
     }),
