@@ -7,11 +7,10 @@ interface RoleSwitcherProps {
   onRoleChange: (role: UserRole) => void;
 }
 
-const roles: { value: UserRole; label: string; sublabel: string; color: string; bgColor: string; borderColor: string }[] = [
+const roles: { value: UserRole; label: string; color: string; bgColor: string; borderColor: string }[] = [
   { 
     value: 'junior', 
     label: 'Junior Employee', 
-    sublabel: 'የሥራ ተማሪ',
     color: 'text-green-700', 
     bgColor: 'bg-green-50', 
     borderColor: 'border-green-200' 
@@ -19,7 +18,6 @@ const roles: { value: UserRole; label: string; sublabel: string; color: string; 
   { 
     value: 'senior', 
     label: 'Senior / Team Lead', 
-    sublabel: 'ከፍተኛ ሠራተኛ',
     color: 'text-blue-700', 
     bgColor: 'bg-blue-50', 
     borderColor: 'border-blue-200' 
@@ -27,7 +25,6 @@ const roles: { value: UserRole; label: string; sublabel: string; color: string; 
   { 
     value: 'admin', 
     label: 'Admin / HR', 
-    sublabel: 'አስተዳደር',
     color: 'text-purple-700', 
     bgColor: 'bg-purple-50', 
     borderColor: 'border-purple-200' 
@@ -58,9 +55,6 @@ export function RoleSwitcher({ currentRole, onRoleChange }: RoleSwitcherProps) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-semibold">{role.label}</p>
-                <p className={`text-xs ${currentRole === role.value ? 'opacity-70' : 'text-slate-400'}`}>
-                  {role.sublabel}
-                </p>
               </div>
               {currentRole === role.value && (
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

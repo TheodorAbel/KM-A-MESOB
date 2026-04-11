@@ -42,12 +42,12 @@ export function TopNavbar() {
   return (
     <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50 flex items-center px-4 gap-4">
       <div className="flex items-center gap-3 min-w-52">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 flex items-center justify-center shadow-md">
-          <span className="text-white font-bold text-lg">ለ</span>
+        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md">
+          <span className="text-white font-bold text-lg">A</span>
         </div>
         <div className="hidden sm:block">
           <h1 className="text-lg font-bold text-slate-800 tracking-tight">A-Mesob KMS</h1>
-          <p className="text-xs text-blue-600 font-medium">የልህቀት አስተዳደር • Service Center</p>
+          <p className="text-xs text-blue-600 font-medium">Knowledge Management</p>
         </div>
       </div>
 
@@ -72,7 +72,7 @@ export function TopNavbar() {
             className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center px-2 py-0.5 text-xs text-slate-400 bg-slate-100 rounded">
-            ⌘K
+            Ctrl+K
           </kbd>
         </div>
       </div>
@@ -109,7 +109,7 @@ export function TopNavbar() {
               d="M13 10V3L4 14h7v7l9-11h-7z"
             />
           </svg>
-          የስልጠና ሂደት • My Growth
+          My Growth
         </Link>
 
         <div className="relative" ref={dropdownRef}>
@@ -145,8 +145,8 @@ export function TopNavbar() {
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-lg border border-slate-200 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-lg border border-slate-200 py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="px-4 py-3 border-b border-slate-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
                     <span className="text-white text-sm font-bold">

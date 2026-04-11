@@ -9,12 +9,12 @@ import { InsightType } from '@/types';
 
 type FilterType = 'All' | InsightType;
 
-const filters: { type: FilterType; label: string; sublabel: string; emoji: string }[] = [
-  { type: 'All', label: 'All Posts', sublabel: 'ሁሉም ፖስቶች', emoji: '📋' },
-  { type: 'Insight', label: 'Insights', sublabel: 'ግንዛቦች', emoji: '💡' },
-  { type: 'Challenge', label: 'Challenges', sublabel: 'ችግሮች', emoji: '⚠️' },
-  { type: 'Lesson Learned', label: 'Lessons', sublabel: 'ትምህርቶች', emoji: '📘' },
-  { type: 'Question', label: 'Questions', sublabel: 'ጥያቄዎች', emoji: '❓' },
+const filters: { type: FilterType; label: string; emoji: string }[] = [
+  { type: 'All', label: 'All Posts', emoji: '📋' },
+  { type: 'Insight', label: 'Insights', emoji: '💡' },
+  { type: 'Challenge', label: 'Challenges', emoji: '⚠️' },
+  { type: 'Lesson Learned', label: 'Lessons', emoji: '📘' },
+  { type: 'Question', label: 'Questions', emoji: '❓' },
 ];
 
 export default function CommunityPage() {
@@ -40,7 +40,7 @@ export default function CommunityPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-slate-800">Community Board</h1>
           <p className="text-slate-500 mt-1">
-            ማህበረሰብ ቦርድ • Share insights, challenges, and lessons learned
+            Share insights, challenges, and lessons learned with your team
           </p>
         </div>
 
@@ -59,9 +59,6 @@ export default function CommunityPage() {
                 }`}
               >
                 {filter.emoji} {filter.label}
-                <span className={`ml-1 text-xs ${activeFilter === filter.type ? 'text-blue-200' : 'text-slate-400'}`}>
-                  {filter.sublabel}
-                </span>
               </button>
             ))}
           </div>
@@ -76,7 +73,7 @@ export default function CommunityPage() {
                 </svg>
               </div>
               <p className="text-lg font-medium text-slate-700">No posts yet</p>
-              <p className="text-slate-500 mt-1">አዲስ ፅሁፍ ይጻፉ • Be the first to share an insight!</p>
+              <p className="text-slate-500 mt-1">Be the first to share an insight!</p>
             </div>
           ) : (
             filteredPosts.map((post) => (

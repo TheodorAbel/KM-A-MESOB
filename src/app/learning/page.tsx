@@ -122,7 +122,7 @@ export default function LearningPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">የስልጠና ሂደት • My Growth</h1>
+            <h1 className="text-2xl font-bold text-slate-800">My Growth</h1>
             <p className="text-slate-500 mt-1">Track your career progression at A-Mesob Service Center</p>
           </div>
         </div>

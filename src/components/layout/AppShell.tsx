@@ -21,14 +21,9 @@ export function AppShell({ children }: AppShellProps) {
       <footer className="ml-64 bg-white border-t border-slate-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center">
-                <span className="text-white text-xs font-bold">ለ</span>
-              </div>
-              <span className="text-sm font-medium text-slate-700">A-Mesob KMS</span>
-            </div>
+            <span className="text-sm font-medium text-slate-700">A-Mesob KMS</span>
             <span className="text-slate-300">|</span>
-            <span className="text-xs text-slate-500">የልህቀት አስተዳደር • Knowledge Management System</span>
+            <span className="text-xs text-slate-500">Knowledge Management System</span>
           </div>
           
           <div className="flex items-center gap-4">
