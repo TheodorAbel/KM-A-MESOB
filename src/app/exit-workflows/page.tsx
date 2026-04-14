@@ -195,7 +195,7 @@ function HandoverWizard({ onComplete }: { onComplete: () => void }) {
                 <div>
                   <p className="font-semibold text-blue-800">Experience Documentation</p>
                   <p className="text-sm text-blue-700 mt-1">
-                    Document tacit knowledge, unwritten rules, and institutional practices that aren't in official documentation.
+                    Document tacit knowledge, unwritten rules, and institutional practices that are not in official documentation.
                   </p>
                 </div>
               </div>
@@ -614,37 +614,39 @@ export default function ExitWorkflowsPage() {
 
   return (
     <AppShell>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
               <span>🔄</span>
-              Architecture Handover
+              <span className="hidden sm:inline">Architecture Handover</span>
+              <span className="sm:hidden">Exit Workflows</span>
             </h1>
-            <p className="text-slate-500 mt-1">
-              Technical knowledge transfer for departing engineers and system ownership
+            <p className="text-slate-500 mt-1 text-sm sm:text-base">
+              Knowledge transfer for departing engineers
             </p>
           </div>
           {isAdmin && (
             <button
               onClick={() => setShowWizard(!showWizard)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              New Handover
+              <span className="sm:hidden">New</span>
+              <span className="hidden sm:inline">New Handover</span>
             </button>
           )}
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-100 rounded-lg">
-                <span className="text-xl">📁</span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-slate-100 rounded-lg">
+                <span className="text-base sm:text-xl">📁</span>
               </div>
               <div>
                 <p className="text-2xl font-bold text-slate-800">{offboardingRecords.length}</p>

@@ -121,9 +121,12 @@ ${postMortem.fixApplied}
     addArticle({
       title: `Post-Mortem: ${ticketToResolve.title}`,
       content: kbArticleContent,
+      summary: `Root cause: ${postMortem.rootCause.substring(0, 150)}...`,
       category: 'Digital Infrastructure',
       authorId: currentUser.id,
       tags: ['post-mortem', 'incident', ticketToResolve.category.toLowerCase(), ticketToResolve.priority.toLowerCase()],
+      relatedArticles: [],
+      searchTerms: [ticketToResolve.title, ticketToResolve.category, ticketToResolve.priority, postMortem.rootCause.split(' ')[0]],
       status: 'draft',
     });
 
@@ -153,87 +156,92 @@ ${postMortem.fixApplied}
 
   return (
     <AppShell>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
               <span>🐛</span>
-              Incident Management
+              <span className="hidden sm:inline">Incident Management</span>
+              <span className="sm:hidden">Issues</span>
             </h1>
-            <p className="text-slate-500 mt-1">
-              Track and resolve technical incidents with post-mortem documentation
+            <p className="text-slate-500 mt-1 text-sm sm:text-base">
+              Track and resolve technical incidents
             </p>
           </div>
           <button
             onClick={() => setShowNewTicketForm(!showNewTicketForm)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            New Incident
+            <span className="sm:hidden">New</span>
+            <span className="hidden sm:inline">New Incident</span>
           </button>
         </div>
 
         {/* Stats Bar */}
-        <div className="flex flex-wrap gap-4">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200">
-            <span className="text-lg">📋</span>
-            <span className="text-sm text-slate-600">{openCount} Open Incidents</span>
+        <div className="flex flex-wrap gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white rounded-lg border border-slate-200">
+            <span className="text-sm sm:text-lg">📋</span>
+            <span className="text-xs sm:text-sm text-slate-600">{openCount} Open</span>
           </div>
           {criticalCount > 0 && (
-            <div className="flex items-center gap-2 px-4 py-2 bg-red-50 rounded-lg border border-red-200">
-              <span className="text-lg">🔴</span>
-              <span className="text-sm text-red-700 font-medium">{criticalCount} Critical</span>
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-red-50 rounded-lg border border-red-200">
+              <span className="text-sm sm:text-lg">🔴</span>
+              <span className="text-xs sm:text-sm text-red-700 font-medium">{criticalCount} Critical</span>
             </div>
           )}
           {highCount > 0 && (
-            <div className="flex items-center gap-2 px-4 py-2 bg-amber-50 rounded-lg border border-amber-200">
-              <span className="text-lg">🟠</span>
-              <span className="text-sm text-amber-700 font-medium">{highCount} High Priority</span>
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-amber-50 rounded-lg border border-amber-200">
+              <span className="text-sm sm:text-lg">🟠</span>
+              <span className="text-xs sm:text-sm text-amber-700 font-medium">{highCount} High</span>
             </div>
           )}
-          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-slate-200">
-            <span className="text-lg">✅</span>
-            <span className="text-sm text-slate-600">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white rounded-lg border border-slate-200">
+            <span className="text-sm sm:text-lg">✅</span>
+            <span className="text-xs sm:text-sm text-slate-600 hidden sm:inline">
               {ticketsByStatus['Resolved'].filter(t => t.postMortemGenerated).length} Post-Mortems
+            </span>
+            <span className="text-xs sm:text-sm text-slate-600 sm:hidden">
+              {ticketsByStatus['Resolved'].filter(t => t.postMortemGenerated).length} PMs
             </span>
           </div>
         </div>
 
         {/* New Ticket Form */}
         {showNewTicketForm && (
-          <div className="bg-white rounded-xl border border-slate-200 p-6">
-            <h3 className="font-semibold text-slate-800 mb-4">Report New Incident</h3>
-            <div className="space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-6">
+            <h3 className="font-semibold text-slate-800 mb-4 text-sm sm:text-base">Report New Incident</h3>
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Title</label>
                 <input
                   type="text"
                   value={newTicket.title}
                   onChange={(e) => setNewTicket({ ...newTicket, title: e.target.value })}
                   placeholder="Brief description of the incident..."
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Description</label>
                 <textarea
                   value={newTicket.description}
                   onChange={(e) => setNewTicket({ ...newTicket, description: e.target.value })}
                   placeholder="Detailed description including affected services, error messages, user impact..."
-                  rows={4}
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  rows={3}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                  <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Category</label>
                   <select
                     value={newTicket.category}
                     onChange={(e) => setNewTicket({ ...newTicket, category: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
                   >
                     {categories.map((cat) => (
                       <option key={cat.value} value={cat.value}>{cat.label}</option>
@@ -241,11 +249,11 @@ ${postMortem.fixApplied}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Priority</label>
+                  <label className="block text-xs sm:text-sm font-medium text-slate-700 mb-1">Priority</label>
                   <select
                     value={newTicket.priority}
                     onChange={(e) => setNewTicket({ ...newTicket, priority: e.target.value as IssuePriority })}
-                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm"
                   >
                     {priorities.map((p) => (
                       <option key={p} value={p}>{p}</option>
@@ -253,57 +261,59 @@ ${postMortem.fixApplied}
                   </select>
                 </div>
               </div>
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
                 <button
                   onClick={() => setShowNewTicketForm(false)}
-                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium"
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium text-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreateTicket}
                   disabled={!newTicket.title.trim() || !newTicket.description.trim()}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
+                  className="px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 text-sm"
                 >
-                  Submit Incident
+                  Submit
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Kanban Board */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {columns.map((column) => (
-            <div key={column.id} className="flex flex-col">
-              <div className="flex items-center gap-2 mb-4">
-                <div className={`w-3 h-3 rounded-full ${column.color}`} />
-                <h3 className="font-semibold text-slate-800">{column.label}</h3>
-                <span className="ml-auto px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-sm font-medium">
-                  {ticketsByStatus[column.id]?.length || 0}
-                </span>
+        {/* Kanban Board - Horizontal scroll on mobile */}
+        <div className="overflow-x-auto pb-4 -mx-4 px-4 lg:mx-0 lg:px-0">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 min-w-[900px] lg:min-w-0">
+            {columns.map((column) => (
+              <div key={column.id} className="flex flex-col">
+                <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                  <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${column.color}`} />
+                  <h3 className="font-semibold text-slate-800 text-sm sm:text-base">{column.label}</h3>
+                  <span className="ml-auto px-1.5 sm:px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs sm:text-sm font-medium">
+                    {ticketsByStatus[column.id]?.length || 0}
+                  </span>
+                </div>
+                <div className="flex-1 space-y-2 sm:space-y-3 min-h-[400px] sm:min-h-[500px] bg-slate-50 rounded-xl p-2 sm:p-3">
+                  {ticketsByStatus[column.id]?.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-32 sm:h-40 text-slate-400 text-xs sm:text-sm">
+                      <span className="text-xl sm:text-2xl mb-1 sm:mb-2">✓</span>
+                      <span>No incidents</span>
+                    </div>
+                  ) : (
+                    ticketsByStatus[column.id]?.map((ticket) => (
+                      <IssueCard
+                        key={ticket.id}
+                        ticket={ticket}
+                        onClick={() => handleOpenTicket(ticket)}
+                        onStatusChange={(newStatus) => handleStatusChange(ticket, newStatus)}
+                        canModify={canModify}
+                        showStatusChange={canModify && ticket.status !== 'Resolved'}
+                      />
+                    ))
+                  )}
+                </div>
               </div>
-              <div className="flex-1 space-y-3 min-h-[500px] bg-slate-50 rounded-xl p-3">
-                {ticketsByStatus[column.id]?.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-40 text-slate-400 text-sm">
-                    <span className="text-2xl mb-2">✓</span>
-                    <span>No incidents</span>
-                  </div>
-                ) : (
-                  ticketsByStatus[column.id]?.map((ticket) => (
-                    <IssueCard
-                      key={ticket.id}
-                      ticket={ticket}
-                      onClick={() => handleOpenTicket(ticket)}
-                      onStatusChange={(newStatus) => handleStatusChange(ticket, newStatus)}
-                      canModify={canModify}
-                      showStatusChange={canModify && ticket.status !== 'Resolved'}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Ticket Detail Modal */}

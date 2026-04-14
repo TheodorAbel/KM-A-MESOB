@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
 import { useAuth } from '@/context/AuthContext';
 import { AppShell } from '@/components/layout';
@@ -21,13 +21,13 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
   }, [onClose]);
 
   return (
-    <div className={`fixed bottom-6 right-6 px-6 py-4 rounded-xl shadow-lg text-white animate-in slide-in-from-bottom-4 ${
+    <div className={`fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 px-4 sm:px-6 py-3 sm:py-4 rounded-xl shadow-lg text-white animate-in slide-in-from-bottom-4 ${
       type === 'success' ? 'bg-green-600' : 'bg-amber-600'
     }`}>
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">{type === 'success' ? '✅' : '🚩'}</span>
-        <p className="font-medium">{message}</p>
-        <button onClick={onClose} className="ml-4 p-1 hover:bg-white/20 rounded">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <span className="text-xl sm:text-2xl">{type === 'success' ? '✅' : '🚩'}</span>
+        <p className="font-medium text-sm sm:text-base flex-1">{message}</p>
+        <button onClick={onClose} className="p-1 hover:bg-white/20 rounded">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -44,32 +44,32 @@ function ArticleCard({ article, onClick }: { article: KnowledgeArticle; onClick:
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl border border-slate-200 p-5 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all group"
+      className="bg-white rounded-xl border border-slate-200 p-3 sm:p-5 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all group"
     >
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between mb-2 sm:mb-3">
         <div className="flex gap-2">
           {article.needsVerification ? (
-            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
-              ⚠️ Needs Verification
+            <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
+              ⚠️ Verification
             </span>
           ) : (
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+            <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs font-medium ${article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
               {article.status}
             </span>
           )}
         </div>
-        <span className="text-xs text-slate-400">{article.views} views</span>
+        <span className="text-xs text-slate-400 hidden sm:inline">{article.views} views</span>
       </div>
-      <h3 className="font-semibold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+      <h3 className="font-semibold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2 text-sm sm:text-base">
         {article.title}
       </h3>
-      <p className="text-sm text-slate-500 mb-4 line-clamp-2">{article.content.replace(/<[^>]*>/g, '').substring(0, 120)}...</p>
+      <p className="text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4 line-clamp-2">{article.content.replace(/<[^>]*>/g, '').substring(0, 100)}...</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-white text-xs font-medium">
+          <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-white text-xs font-medium">
             {author?.avatar || author?.name?.charAt(0) || '?'}
           </div>
-          <span className="text-xs text-slate-500">{author?.name || 'Unknown'}</span>
+          <span className="text-xs text-slate-500 hidden sm:inline">{author?.name || 'Unknown'}</span>
         </div>
         <div className="flex items-center gap-3 text-xs text-slate-400">
           <span className="flex items-center gap-1">
@@ -92,7 +92,6 @@ function ArticleViewer({ article, onClose }: { article: KnowledgeArticle; onClos
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const canEdit = isSenior || isAdmin;
-  const canFlag = !article.needsVerification;
 
   const handleFlag = () => {
     if (!user) return;
@@ -111,24 +110,24 @@ function ArticleViewer({ article, onClose }: { article: KnowledgeArticle; onClos
   return (
     <>
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden h-full flex flex-col">
-        <div className="p-6 border-b border-slate-200">
+        <div className="p-3 sm:p-6 border-b border-slate-200">
           {/* Verification Banner */}
           {article.needsVerification && (
-            <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🚩</span>
+            <div className="mb-4 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <span className="text-xl sm:text-2xl">🚩</span>
                 <div className="flex-1">
-                  <p className="font-semibold text-amber-800">Reality Check Flagged</p>
-                  <p className="text-sm text-amber-700">
-                    Flagged by {users.find(u => u.id === article.flaggedBy)?.name || 'Unknown'} on {new Date(article.flaggedAt || '').toLocaleDateString()}
+                  <p className="font-semibold text-amber-800 text-sm sm:text-base">Reality Check Flagged</p>
+                  <p className="text-xs sm:text-sm text-amber-700">
+                    Flagged by {users.find(u => u.id === article.flaggedBy)?.name || 'Unknown'}
                   </p>
                 </div>
                 {canEdit && (
                   <button
                     onClick={handleResolveFlag}
-                    className="px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors"
+                    className="px-3 sm:px-4 py-2 bg-amber-600 text-white font-medium rounded-lg hover:bg-amber-700 transition-colors text-sm"
                   >
-                    Resolve & Update Document
+                    Resolve
                   </button>
                 )}
               </div>
@@ -136,54 +135,55 @@ function ArticleViewer({ article, onClose }: { article: KnowledgeArticle; onClos
           )}
 
           <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
-                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
+                <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-xs font-medium ${
                   article.needsVerification ? 'bg-amber-100 text-amber-700 border border-amber-200' :
                   article.status === 'draft' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'
                 }`}>
-                  {article.needsVerification ? '⚠️ Needs Verification' : article.category}
+                  {article.needsVerification ? '⚠️ Verification' : article.category.split(' ')[0]}
                 </span>
                 {!canEdit && !article.needsVerification && (
                   <button
                     onClick={handleFlag}
-                    className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 border border-slate-200 rounded-full hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all flex items-center gap-1.5"
+                    className="px-2 py-1 text-xs font-medium text-slate-600 bg-slate-100 border border-slate-200 rounded-full hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700 transition-all flex items-center gap-1"
                   >
                     <span>🚩</span>
-                    <span>Flag: Outdated / Reality Check</span>
+                    <span className="hidden sm:inline">Flag: Outdated</span>
+                    <span className="sm:hidden">Flag</span>
                   </button>
                 )}
               </div>
-              <h2 className="text-2xl font-bold text-slate-800 mb-2">{article.title}</h2>
-              <div className="flex items-center gap-4 text-sm text-slate-500">
+              <h2 className="text-lg sm:text-2xl font-bold text-slate-800 mb-2">{article.title}</h2>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-white text-sm font-medium">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-white text-xs sm:text-sm font-medium">
                     {author?.avatar || author?.name?.charAt(0) || '?'}
                   </div>
-                  <span>{author?.name || 'Unknown'}</span>
+                  <span className="hidden sm:inline">{author?.name || 'Unknown'}</span>
                 </div>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <span>{new Date(article.updatedAt).toLocaleDateString()}</span>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <span>{article.views} views</span>
               </div>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg">
+            <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg ml-2">
               <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-          <div className="flex items-center gap-2 mt-4">
+          <div className="flex items-center gap-2 mt-3 sm:mt-4 overflow-x-auto pb-1">
             {article.tags.map((tag) => (
-              <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">
+              <span key={tag} className="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs whitespace-nowrap">
                 #{tag}
               </span>
             ))}
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="prose prose-slate max-w-none" dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br/>') }} />
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6">
+          <div className="prose prose-slate max-w-none text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br/>') }} />
         </div>
       </div>
 
@@ -215,23 +215,16 @@ function KnowledgeBaseContent() {
   const searchParams = useSearchParams();
   const { articles } = useAppStore();
   const { isSenior, isAdmin } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState<ArticleCategory | 'all'>(
-    (searchParams.get('category') as ArticleCategory) || 'all'
-  );
   const [selectedArticle, setSelectedArticle] = useState<KnowledgeArticle | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const canCreate = isSenior || isAdmin;
-
-  useEffect(() => {
-    const category = searchParams.get('category');
-    if (category && categories.some((c) => c.id === category)) {
-      setSelectedCategory(category as ArticleCategory);
-    } else if (!category) {
-      setSelectedCategory('all');
-    }
-  }, [searchParams]);
+  const rawCategory = searchParams.get('category');
+  const selectedCategory: ArticleCategory | 'all' = rawCategory 
+    ? (rawCategory as ArticleCategory)
+    : 'all';
+  const router = useRouter();
 
   const articleCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -262,31 +255,36 @@ function KnowledgeBaseContent() {
   }, [articles, selectedCategory, searchQuery]);
 
   const handleCategorySelect = (category: ArticleCategory | 'all') => {
-    setSelectedCategory(category);
+    if (category === 'all') {
+      router.push('/knowledge-base');
+    } else {
+      router.push(`/knowledge-base?category=${encodeURIComponent(category)}`);
+    }
     setSelectedArticle(null);
   };
 
   return (
     <>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-              📚 Knowledge Base
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+              📚 <span className="hidden sm:inline">Knowledge Base</span>
             </h1>
-            <p className="text-slate-500 mt-1">
-              Technical documentation for government integrations and payment systems
+            <p className="text-slate-500 mt-1 text-sm sm:text-base">
+              Technical documentation for government integrations
             </p>
           </div>
           {canCreate && (
             <button
               onClick={() => setIsEditorOpen(true)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Create Article
+              <span className="sm:hidden">New</span>
+              <span className="hidden sm:inline">Create Article</span>
             </button>
           )}
         </div>
@@ -309,9 +307,39 @@ function KnowledgeBaseContent() {
           />
         </div>
 
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-3">
-            <div className="bg-white rounded-xl border border-slate-200 p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+          {/* Mobile: Horizontal category tabs */}
+          <div className="lg:hidden -mx-4 sm:mx-0 px-4 sm:px-0">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-300">
+              <button
+                onClick={() => handleCategorySelect('all')}
+                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedCategory === 'all'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-slate-600 border border-slate-200'
+                }`}
+              >
+                All ({articles.filter((a) => a.status !== 'draft').length})
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => handleCategorySelect(cat.id)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    selectedCategory === cat.id
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-slate-600 border border-slate-200'
+                  }`}
+                >
+                  {cat.icon} {cat.label.split(' ')[0]} ({articleCounts[cat.id] || 0})
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Sidebar categories */}
+          <div className="hidden lg:block lg:col-span-3">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 sticky top-20">
               <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
                 <span>📂</span> Categories
               </h3>
@@ -381,7 +409,7 @@ function KnowledgeBaseContent() {
 
           <div className="col-span-12 lg:col-span-9">
             {selectedArticle ? (
-              <div className="h-[calc(100vh-280px)]">
+              <div className="h-[calc(100vh-200px)] lg:h-[calc(100vh-280px)]">
                 <ArticleViewer 
                   article={selectedArticle} 
                   onClose={() => setSelectedArticle(null)} 
@@ -390,13 +418,13 @@ function KnowledgeBaseContent() {
             ) : (
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-slate-800">
+                  <h2 className="text-base sm:text-lg font-semibold text-slate-800">
                     {selectedCategory === 'all' ? 'All Articles' : selectedCategory}
                     <span className="text-slate-400 font-normal ml-2">({filteredArticles.length})</span>
                   </h2>
                 </div>
                 {filteredArticles.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                     {filteredArticles.map((article) => (
                       <ArticleCard
                         key={article.id}
@@ -406,12 +434,12 @@ function KnowledgeBaseContent() {
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
-                    <div className="w-16 h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                      <span className="text-3xl">📄</span>
+                  <div className="bg-white rounded-xl border border-slate-200 p-6 sm:p-12 text-center">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                      <span className="text-2xl sm:text-3xl">📄</span>
                     </div>
-                    <h3 className="text-lg font-medium text-slate-700 mb-1">No articles found</h3>
-                    <p className="text-slate-500">
+                    <h3 className="text-base sm:text-lg font-medium text-slate-700 mb-1">No articles found</h3>
+                    <p className="text-slate-500 text-sm">
                       {searchQuery ? 'Try a different search term' : 'No articles in this category yet'}
                     </p>
                   </div>

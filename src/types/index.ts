@@ -22,21 +22,49 @@ export interface User {
 
 export type ArticleCategory = 'Government Integrations' | 'FinTech & Payment Gateways' | 'Digital Infrastructure';
 
+export type ArticleLifecycle = 'draft' | 'review' | 'published' | 'archived' | 'retired';
+
+export interface ArticleVersion {
+  id: string;
+  articleId: string;
+  version: number;
+  content: string;
+  editedBy: string;
+  editedAt: string;
+  changeNote?: string;
+}
+
+export interface ArticleFeedback {
+  id: string;
+  articleId: string;
+  userId: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  comment?: string;
+  createdAt: string;
+}
+
 export interface KnowledgeArticle {
   id: string;
   title: string;
   content: string;
+  summary: string;
   category: ArticleCategory;
   authorId: string;
+  ownerId?: string;
   tags: string[];
+  relatedArticles: string[];
   createdAt: string;
   updatedAt: string;
+  lastReviewedAt?: string;
   views: number;
   likes: number;
-  status: 'draft' | 'published' | 'archived';
+  status: ArticleLifecycle;
   needsVerification?: boolean;
   flaggedBy?: string;
   flaggedAt?: string;
+  versions: ArticleVersion[];
+  feedback: ArticleFeedback[];
+  searchTerms: string[];
 }
 
 export type InsightType = 'Insight' | 'Challenge' | 'Lesson Learned' | 'Question';
@@ -176,4 +204,32 @@ export interface MentorshipNote {
   note: string;
   rating?: number;
   createdAt: string;
+}
+
+export interface SearchAnalytics {
+  id: string;
+  query: string;
+  resultsCount: number;
+  clickedArticleId?: string;
+  userId?: string;
+  timestamp: string;
+}
+
+export interface KnowledgeGap {
+  id: string;
+  topic: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  suggestedBy: string;
+  status: 'identified' | 'in-progress' | 'resolved' | "won't-fix";
+  relatedArticleIds: string[];
+  createdAt: string;
+  resolvedAt?: string;
+}
+
+export interface KnowledgeSteward {
+  userId: string;
+  name: string;
+  categories: ArticleCategory[];
+  responsibilities: string[];
 }

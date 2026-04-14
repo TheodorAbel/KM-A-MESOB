@@ -1,26 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { ArticleCategory } from '@/types';
 
 interface NavSection {
   id: string;
   label: string;
   icon: React.ReactNode;
   href?: string;
-  subItems?: { label: string; href: string; category?: ArticleCategory }[];
   adminOnly?: boolean;
 }
-
-const kbCategories = [
-  { label: 'All Articles', href: '/knowledge-base', category: undefined as undefined },
-  { label: 'Government Integrations', href: '/knowledge-base?category=Government%20Integrations', category: 'Government Integrations' as ArticleCategory },
-  { label: 'FinTech & Payments', href: '/knowledge-base?category=FinTech%20%26%20Payment%20Gateways', category: 'FinTech & Payment Gateways' as ArticleCategory },
-  { label: 'Digital Infrastructure', href: '/knowledge-base?category=Digital%20Infrastructure', category: 'Digital Infrastructure' as ArticleCategory },
-];
 
 const navSections: NavSection[] = [
   {
@@ -36,12 +27,12 @@ const navSections: NavSection[] = [
   {
     id: 'knowledge-base',
     label: 'Knowledge Base',
+    href: '/knowledge-base',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
       </svg>
     ),
-    subItems: kbCategories,
   },
   {
     id: 'community',
@@ -108,17 +99,14 @@ const navSections: NavSection[] = [
   },
 ];
 
-export function LeftSidebar() {
+interface LeftSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function LeftSidebar({ isOpen, onClose }: LeftSidebarProps) {
   const { isAdmin } = useAuth();
   const pathname = usePathname();
-  const [expandedItems, setExpandedItems] = useState<string[]>(['knowledge-base']);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  const toggleExpand = (id: string) => {
-    setExpandedItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
 
   const isActive = (href?: string) => {
     if (!href) return false;
@@ -128,118 +116,84 @@ export function LeftSidebar() {
 
   const visibleSections = navSections.filter((section) => !section.adminOnly || isAdmin);
 
-  return (
-    <aside
-      className={`fixed left-0 top-16 bottom-0 bg-slate-800 text-white transition-all duration-300 z-40 ${
-        isCollapsed ? 'w-16' : 'w-64'
-      }`}
-    >
-      <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
-          {!isCollapsed && (
-            <span className="text-sm font-medium text-slate-300">Main Menu</span>
-          )}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1.5 rounded-lg hover:bg-slate-700 transition-colors"
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <svg
-              className={`w-5 h-5 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-            </svg>
-          </button>
-        </div>
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
-        <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
-          <ul className="space-y-1 px-2">
-            {visibleSections.map((section) => (
-              <li key={section.id}>
-                {section.subItems ? (
-                  <div>
-                    <button
-                      onClick={() => toggleExpand(section.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                        isActive('/knowledge-base')
-                          ? 'bg-blue-600 text-white'
-                          : expandedItems.includes(section.id)
-                            ? 'bg-slate-700/50 text-white'
-                            : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                      }`}
-                      title={isCollapsed ? section.label : undefined}
-                    >
-                      {section.icon}
-                      {!isCollapsed && (
-                        <>
-                          <span className="flex-1 text-left text-sm font-medium">
-                            {section.label}
-                          </span>
-                          <svg
-                            className={`w-4 h-4 transition-transform ${
-                              expandedItems.includes(section.id) ? 'rotate-180' : ''
-                            }`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </>
-                      )}
-                    </button>
-                    {!isCollapsed && expandedItems.includes(section.id) && (
-                      <ul className="mt-1 ml-4 pl-4 border-l border-slate-600 space-y-1">
-                        {section.subItems.map((subItem, idx) => (
-                          <li key={idx}>
-                            <Link
-                              href={subItem.href}
-                              className="flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
-                            >
-                              <svg className="w-1.5 h-1.5 rounded-full bg-current shrink-0" fill="currentColor" viewBox="0 0 6 6">
-                                <circle cx="3" cy="3" r="3" />
-                              </svg>
-                              {subItem.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ) : (
+  return (
+    <>
+      <aside
+        className={`
+          fixed left-0 top-0 bottom-0 bg-gradient-to-b from-blue-800 to-blue-900 text-white z-50
+          transform transition-transform duration-300 ease-in-out
+          w-64
+          lg:translate-x-0 lg:static lg:z-30
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+      >
+        <div className="flex flex-col h-full">
+          <div className="flex items-center justify-between p-4 border-b border-blue-700/50">
+            <span className="text-sm font-medium text-blue-200">Main Menu</span>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg hover:bg-blue-700/50 transition-colors lg:hidden"
+              title="Close menu"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-blue-600 scrollbar-track-transparent">
+            <ul className="space-y-1 px-2">
+              {visibleSections.map((section) => (
+                <li key={section.id}>
                   <Link
                     href={section.href || '/'}
+                    onClick={onClose}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                       isActive(section.href)
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                        : 'text-blue-100 hover:bg-blue-700/50 hover:text-white'
                     }`}
-                    title={isCollapsed ? section.label : undefined}
                   >
                     {section.icon}
-                    {!isCollapsed && (
-                      <span className="text-sm font-medium">{section.label}</span>
-                    )}
+                    <span className="text-sm font-medium">{section.label}</span>
                   </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-        {!isCollapsed && (
-          <div className="p-4 border-t border-slate-700">
-            <div className="bg-slate-700/50 rounded-lg p-3">
-              <p className="text-xs text-slate-400 mb-1">Need Help?</p>
-              <p className="text-sm text-slate-200">Contact IT Support</p>
-              <p className="text-xs text-slate-400">support@a-mesob.et</p>
+          <div className="p-4 border-t border-blue-700/50">
+            <div className="bg-blue-700/30 rounded-lg p-3 backdrop-blur">
+              <p className="text-xs text-blue-200 mb-1">Need Help?</p>
+              <p className="text-sm text-white">Contact IT Support</p>
+              <p className="text-xs text-blue-300">support@a-mesob.et</p>
             </div>
           </div>
-        )}
-      </div>
-    </aside>
+        </div>
+      </aside>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
+    </>
   );
 }

@@ -220,7 +220,7 @@ export default function QMSFeedbackPage() {
       title: `[Knowledge Gap] ${data.title}`,
       description: `Source: ${selectedFeedback.source}\nCitizen Failure Rate: ${selectedFeedback.citizenFailureRate}%\n\nOriginal Feedback:\n${selectedFeedback.issueDescription}\n\nTechnical Solution:\n${data.description}`,
       status: 'Open',
-      priority: data.priority as any,
+      priority: data.priority as 'Low' | 'Medium' | 'High' | 'Critical',
       category: data.category,
       reportedById: currentUser.id,
     });
@@ -250,52 +250,53 @@ export default function QMSFeedbackPage() {
 
   return (
     <AppShell>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
               <span>📊</span>
-              Citizen Impact & QMS Feedback
+              <span className="hidden sm:inline">Citizen Impact & QMS Feedback</span>
+              <span className="sm:hidden">QMS Feedback</span>
             </h1>
-            <p className="text-slate-500 mt-1">
-              Bridging citizen experience feedback to internal knowledge gaps
+            <p className="text-slate-500 mt-1 text-sm sm:text-base">
+              Citizen experience feedback
             </p>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-100 rounded-lg">
-                <span className="text-xl">📝</span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-slate-100 rounded-lg">
+                <span className="text-base sm:text-xl">📝</span>
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-800">{qmsFeedback.length}</p>
-                <p className="text-sm text-slate-500">Total Feedback</p>
+                <p className="text-lg sm:text-2xl font-bold text-slate-800">{qmsFeedback.length}</p>
+                <p className="text-xs sm:text-sm text-slate-500">Total</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <span className="text-xl">⚠️</span>
+          <div className="bg-white rounded-xl border border-slate-200 p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-red-100 rounded-lg">
+                <span className="text-base sm:text-xl">⚠️</span>
               </div>
               <div>
-                <p className="text-2xl font-bold text-red-600">{criticalCount}</p>
-                <p className="text-sm text-slate-500">Critical Issues</p>
+                <p className="text-lg sm:text-2xl font-bold text-red-600">{criticalCount}</p>
+                <p className="text-xs sm:text-sm text-slate-500">Critical</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-100 rounded-lg">
-                <span className="text-xl">📈</span>
+          <div className="bg-white rounded-xl border border-slate-200 p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-amber-100 rounded-lg">
+                <span className="text-base sm:text-xl">📈</span>
               </div>
               <div>
-                <p className="text-2xl font-bold text-amber-600">{avgFailureRate}%</p>
-                <p className="text-sm text-slate-500">Avg Failure Rate</p>
+                <p className="text-lg sm:text-2xl font-bold text-amber-600">{avgFailureRate}%</p>
+                <p className="text-xs sm:text-sm text-slate-500">Avg Rate</p>
               </div>
             </div>
           </div>

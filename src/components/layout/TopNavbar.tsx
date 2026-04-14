@@ -4,7 +4,11 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 
-export function TopNavbar() {
+interface TopNavbarProps {
+  onMenuToggle: () => void;
+}
+
+export function TopNavbar({ onMenuToggle }: TopNavbarProps) {
   const { user, logout, isAdmin } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hasNotifications] = useState(true);
@@ -40,18 +44,33 @@ export function TopNavbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-50 flex items-center px-4 gap-4">
-      <div className="flex items-center gap-3 min-w-52">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md">
-          <span className="text-white font-bold text-lg">A</span>
+    <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 z-40 flex items-center px-4 gap-3">
+      <button
+        onClick={onMenuToggle}
+        className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+        title="Toggle menu"
+      >
+        <svg
+          className="w-6 h-6 text-slate-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-md">
+          <span className="text-white font-bold text-sm">A</span>
         </div>
         <div className="hidden sm:block">
-          <h1 className="text-lg font-bold text-slate-800 tracking-tight">A-Mesob KMS</h1>
+          <h1 className="text-base font-bold text-slate-800 tracking-tight">A-Mesob KMS</h1>
           <p className="text-xs text-blue-600 font-medium">Knowledge Management</p>
         </div>
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto">
+      <div className="flex-1 max-w-xl mx-auto hidden md:block">
         <div className="relative">
           <svg
             className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
@@ -69,16 +88,16 @@ export function TopNavbar() {
           <input
             type="text"
             placeholder="Search knowledge base, issues, processes..."
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center px-2 py-0.5 text-xs text-slate-400 bg-slate-100 rounded">
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden lg:inline-flex items-center px-2 py-0.5 text-xs text-slate-400 bg-slate-100 rounded">
             Ctrl+K
           </kbd>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <button className="relative p-2.5 rounded-lg hover:bg-slate-100 transition-colors group">
+      <div className="flex items-center gap-1 sm:gap-2">
+        <button className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors group">
           <svg
             className="w-5 h-5 text-slate-600 group-hover:text-blue-600"
             fill="none"
@@ -99,7 +118,7 @@ export function TopNavbar() {
 
         <Link
           href="/learning"
-          className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+          className="hidden sm:flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -109,33 +128,21 @@ export function TopNavbar() {
               d="M13 10V3L4 14h7v7l9-11h-7z"
             />
           </svg>
-          My Growth
+          <span className="hidden lg:inline">My Growth</span>
         </Link>
 
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-3 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
           >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-sm">
-              <span className="text-white text-sm font-medium">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-sm">
+              <span className="text-white text-xs font-medium">
                 {user ? getInitials(user.name) : '?'}
               </span>
             </div>
-            <div className="hidden md:block text-left">
-              <p className="text-sm font-medium text-slate-800">{user?.name}</p>
-              <span
-                className={`text-xs px-1.5 py-0.5 rounded ${getRoleBadgeColor(user?.role || '')}`}
-              >
-                {user?.role === 'admin'
-                  ? 'Admin'
-                  : user?.role === 'senior'
-                    ? 'Team Lead'
-                    : 'Junior'}
-              </span>
-            </div>
             <svg
-              className={`w-4 h-4 text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+              className={`w-4 h-4 text-slate-400 transition-transform hidden sm:block ${isDropdownOpen ? 'rotate-180' : ''}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -156,6 +163,15 @@ export function TopNavbar() {
                   <div>
                     <p className="text-sm font-semibold text-slate-800">{user?.name}</p>
                     <p className="text-xs text-slate-500">{user?.email}</p>
+                    <span
+                      className={`text-xs px-1.5 py-0.5 rounded ${getRoleBadgeColor(user?.role || '')}`}
+                    >
+                      {user?.role === 'admin'
+                        ? 'Admin'
+                        : user?.role === 'senior'
+                          ? 'Team Lead'
+                          : 'Junior'}
+                    </span>
                   </div>
                 </div>
                 <p className="text-xs text-blue-600 mt-2 font-medium">{user?.department} Department</p>
@@ -199,16 +215,6 @@ export function TopNavbar() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                       </svg>
                       Exit Workflows
-                    </a>
-                    <a
-                      href="/admin"
-                      className="flex items-center gap-3 px-4 py-2 text-sm text-purple-600 hover:bg-purple-50 transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      Admin Panel
                     </a>
                   </>
                 )}

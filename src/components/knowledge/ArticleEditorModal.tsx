@@ -47,22 +47,27 @@ export function ArticleEditorModal({
   });
 
   useEffect(() => {
-    setTitle(initialTitle);
-    setCategory(initialCategory);
     if (editor && initialContent) {
       editor.commands.setContent(initialContent);
     }
-  }, [initialTitle, initialContent, initialCategory, editor]);
+  }, [editor, initialContent]);
 
   const handleSubmit = () => {
     if (!title.trim() || !editor || !currentUser) return;
 
+    const content = editor.getHTML();
+    const extractedTags = tags.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean);
+    const extractedSummary = content.replace(/<[^>]*>/g, '').substring(0, 200);
+
     addArticle({
       title: title.trim(),
-      content: editor.getHTML(),
+      content,
+      summary: extractedSummary,
       category,
       authorId: currentUser.id,
-      tags: tags.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean),
+      tags: extractedTags,
+      relatedArticles: [],
+      searchTerms: [title.trim(), ...extractedTags],
       status,
     });
 

@@ -420,31 +420,31 @@ export default function LearningPage() {
 
   return (
     <AppShell>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">My Growth</h1>
-            <p className="text-slate-500 mt-1">Track your career progression at A-Mesob</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800">My Growth</h1>
+            <p className="text-slate-500 mt-1 text-sm sm:text-base">Track your career progression</p>
           </div>
         </div>
 
         {/* Progress Banner */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-4 sm:p-6 text-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="text-blue-100 text-sm">Your Path to Senior Level</p>
-              <h2 className="text-3xl font-bold mt-1">{progress}% Complete</h2>
-              <p className="text-blue-100 mt-1">
+              <p className="text-blue-100 text-xs sm:text-sm">Your Path to Senior Level</p>
+              <h2 className="text-2xl sm:text-3xl font-bold mt-1">{progress}% Complete</h2>
+              <p className="text-blue-100 mt-1 text-xs sm:text-sm">
                 {skills.flatMap((s) => s.skills).filter((sk) => sk.completed).length} of{' '}
                 {skills.flatMap((s) => s.skills).length} skills mastered
               </p>
             </div>
-            <div className="text-right">
+            <div className="text-right hidden sm:block">
               <div className="text-5xl font-bold">{progress}%</div>
               <p className="text-blue-100 text-sm mt-1">Current Progress</p>
             </div>
           </div>
-          <div className="mt-4 h-3 bg-white/20 rounded-full overflow-hidden">
+          <div className="mt-3 sm:mt-4 h-2 sm:h-3 bg-white/20 rounded-full overflow-hidden">
             <div
               className="h-full bg-white rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -452,8 +452,8 @@ export default function LearningPage() {
           </div>
 
           {currentUserPendingRequests.length > 0 && (
-            <div className="mt-4 p-3 bg-white/10 rounded-lg">
-              <div className="flex items-center gap-2 text-sm">
+            <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-white/10 rounded-lg">
+              <div className="flex items-center gap-2 text-xs sm:text-sm">
                 <span>🙋</span>
                 <span>{currentUserPendingRequests.length} shadow session request(s) pending</span>
               </div>
@@ -467,7 +467,7 @@ export default function LearningPage() {
             <div className="flex border-b border-slate-200">
               <button
                 onClick={() => setActiveTab('my-progress')}
-                className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
+                className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-colors ${
                   activeTab === 'my-progress'
                     ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:bg-slate-50'
@@ -477,38 +477,40 @@ export default function LearningPage() {
               </button>
               <button
                 onClick={() => setActiveTab('team-progress')}
-                className={`flex-1 px-6 py-3 text-sm font-medium transition-colors ${
+                className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-colors ${
                   activeTab === 'team-progress'
                     ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600'
                     : 'text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                Team Progress ({juniorUsers.length} juniors)
+                <span className="hidden sm:inline">Team Progress</span>
+                <span className="sm:hidden">Team</span>
+                <span className="ml-1 text-xs">({juniorUsers.length})</span>
               </button>
             </div>
           </div>
         )}
 
         {activeTab === 'my-progress' && (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {skills.map((phase) => (
               <div key={phase.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                <div className={`px-4 py-3 ${phase.bgColor} border-b border-slate-200`}>
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${phase.color}`}>{phase.icon}</div>
+                <div className={`px-3 sm:px-4 py-2 sm:py-3 ${phase.bgColor} border-b border-slate-200`}>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${phase.color}`}>{phase.icon}</div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-slate-800">{phase.title}</h3>
-                      <p className="text-sm text-slate-500">
-                        {phase.skills.filter((s) => s.completed).length} of {phase.skills.length} completed
+                      <h3 className="font-semibold text-slate-800 text-sm sm:text-base">{phase.title}</h3>
+                      <p className="text-xs sm:text-sm text-slate-500">
+                        {phase.skills.filter((s) => s.completed).length}/{phase.skills.length}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 space-y-3">
+                <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
                   {phase.skills.map((skill) => (
                     <div
                       key={skill.id}
-                      className={`p-4 rounded-lg border-2 transition-all ${
+                      className={`p-3 sm:p-4 rounded-lg border-2 transition-all ${
                         skill.completed
                           ? 'bg-green-50 border-green-300'
                           : skill.locked
@@ -516,9 +518,9 @@ export default function LearningPage() {
                           : 'bg-white border-slate-200 hover:border-blue-300'
                       }`}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-2 sm:gap-3">
                         <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${
+                          className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 ${
                             skill.completed
                               ? 'bg-green-500 border-green-500'
                               : skill.locked
@@ -528,35 +530,35 @@ export default function LearningPage() {
                           onClick={() => !skill.locked && handleToggleSkill(skill.id)}
                         >
                           {skill.completed && (
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
                           )}
                           {skill.locked && !skill.completed && (
-                            <svg className="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-400" fill="currentColor" viewBox="0 0 24 24">
                               <path d="M12 17a1 1 0 100-2 1 1 0 000 2zm6-9a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V10a2 2 0 012-2h1V6a5 5 0 1110 0v2h1z" />
                             </svg>
                           )}
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                             <div>
-                              <h4 className="font-medium text-slate-800">{skill.title}</h4>
-                              <p className="text-sm text-slate-500 mt-1">{skill.description}</p>
+                              <h4 className="font-medium text-slate-800 text-sm sm:text-base">{skill.title}</h4>
+                              <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">{skill.description}</p>
                             </div>
-                            {(skill as any).canRequestShadow && isJunior && !skill.completed && (
+                            {'canRequestShadow' in skill && (skill as { canRequestShadow: boolean }).canRequestShadow && isJunior && !skill.completed && (
                               <button
                                 onClick={() => handleRequestShadow(skill.id, skill.title)}
-                                className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors flex items-center gap-1.5"
+                                className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-200 transition-colors flex items-center gap-1 shrink-0"
                               >
                                 <span>🙋</span>
-                                <span>Request Shadow</span>
+                                <span className="hidden sm:inline">Request Shadow</span>
                               </button>
                             )}
                           </div>
                           {skill.locked && (
                             <span className="inline-block mt-2 text-xs px-2 py-0.5 bg-slate-100 text-slate-500 rounded">
-                              Requires supervisor approval
+                              Requires approval
                             </span>
                           )}
                         </div>
@@ -570,47 +572,51 @@ export default function LearningPage() {
         )}
 
         {activeTab === 'team-progress' && (isSenior || isAdmin) && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Pending Shadow Requests */}
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-              <div className="px-4 py-3 bg-amber-50 border-b border-amber-200">
-                <h3 className="font-semibold text-slate-800 flex items-center gap-2">
+              <div className="px-3 sm:px-4 py-2 sm:py-3 bg-amber-50 border-b border-amber-200">
+                <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-sm sm:text-base">
                   <span>🙋</span>
-                  Pending Shadow Requests ({shadowRequests.filter((r) => r.status === 'pending' && seniorUsers.some((s) => s.id === r.seniorId)).length})
+                  <span className="hidden sm:inline">Pending Shadow Requests</span>
+                  <span className="sm:hidden">Pending Requests</span>
+                  <span className="ml-1 px-2 py-0.5 bg-amber-100 rounded text-xs">
+                    {shadowRequests.filter((r) => r.status === 'pending' && seniorUsers.some((s) => s.id === r.seniorId)).length}
+                  </span>
                 </h3>
               </div>
-              <div className="p-4">
+              <div className="p-3 sm:p-4">
                 {shadowRequests.filter((r) => r.status === 'pending' && r.seniorId === user?.id).length === 0 ? (
-                  <p className="text-slate-500 text-sm">No pending shadow requests for you.</p>
+                  <p className="text-slate-500 text-xs sm:text-sm">No pending shadow requests for you.</p>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {shadowRequests
                       .filter((r) => r.status === 'pending' && r.seniorId === user?.id)
                       .map((request) => {
                         const junior = users.find((u) => u.id === request.juniorId);
                         return (
-                          <div key={request.id} className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <p className="font-medium text-slate-800">{junior?.name} requests shadow session</p>
-                                <p className="text-sm text-slate-600">Skill: {request.skillName}</p>
-                                <p className="text-sm text-slate-500">
+                          <div key={request.id} className="p-3 sm:p-4 bg-slate-50 rounded-lg border border-slate-200">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                              <div className="flex-1">
+                                <p className="font-medium text-slate-800 text-sm sm:text-base">{junior?.name}</p>
+                                <p className="text-xs sm:text-sm text-slate-600">Skill: {request.skillName}</p>
+                                <p className="text-xs sm:text-sm text-slate-500">
                                   {request.proposedDate} at {request.proposedTime}
                                 </p>
                                 {request.message && (
-                                  <p className="text-sm text-slate-500 mt-2 italic">"{request.message}"</p>
+                                  <p className="text-xs sm:text-sm text-slate-500 mt-1 sm:mt-2 italic line-clamp-2">&ldquo;{request.message}&rdquo;</p>
                                 )}
                               </div>
-                              <div className="flex gap-2">
+                              <div className="flex gap-2 shrink-0">
                                 <button
                                   onClick={() => handleDeclineShadow(request.id)}
-                                  className="px-3 py-1.5 text-red-600 bg-red-50 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
+                                  className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-red-600 bg-red-50 rounded-lg font-medium hover:bg-red-100 transition-colors"
                                 >
                                   Decline
                                 </button>
                                 <button
                                   onClick={() => handleApproveShadow(request.id)}
-                                  className="px-3 py-1.5 text-green-600 bg-green-50 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors"
+                                  className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-green-600 bg-green-50 rounded-lg font-medium hover:bg-green-100 transition-colors"
                                 >
                                   Accept
                                 </button>
@@ -625,31 +631,31 @@ export default function LearningPage() {
             </div>
 
             {/* Junior Team Members */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {juniorUsers.map((junior) => (
                 <button
                   key={junior.id}
                   onClick={() => setSelectedJunior(selectedJunior === junior.id ? null : junior.id)}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`p-3 sm:p-4 rounded-xl border-2 text-left transition-all ${
                     selectedJunior === junior.id
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center text-white font-medium">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center text-white font-medium text-xs sm:text-sm">
                       {junior.name.split(' ').map((n) => n[0]).join('')}
                     </div>
-                    <div>
-                      <p className="font-medium text-slate-800">{junior.name}</p>
-                      <p className="text-sm text-slate-500">{junior.department}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-slate-800 text-sm sm:text-base truncate">{junior.name}</p>
+                      <p className="text-xs text-slate-500 hidden sm:block">{junior.department}</p>
                     </div>
                   </div>
-                  <div className="mt-3 flex items-center gap-2">
-                    <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="mt-2 sm:mt-3 flex items-center gap-2">
+                    <div className="flex-1 h-1.5 sm:h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div className="h-full bg-green-500 rounded-full" style={{ width: '65%' }} />
                     </div>
-                    <span className="text-sm text-slate-500">65%</span>
+                    <span className="text-xs sm:text-sm text-slate-500">65%</span>
                   </div>
                 </button>
               ))}

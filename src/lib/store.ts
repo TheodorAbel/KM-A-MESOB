@@ -13,6 +13,10 @@ import {
   QMSFeedback,
   ShadowRequest,
   MentorshipNote,
+  SearchAnalytics,
+  KnowledgeGap,
+  ArticleVersion,
+  ArticleFeedback,
 } from '@/types';
 import {
   mockUsers,
@@ -37,15 +41,19 @@ interface AppState {
   qmsFeedback: QMSFeedback[];
   shadowRequests: ShadowRequest[];
   mentorshipNotes: MentorshipNote[];
+  searchAnalytics: SearchAnalytics[];
+  knowledgeGaps: KnowledgeGap[];
 
   setCurrentUser: (user: User | null) => void;
   switchRole: (role: UserRole) => void;
   
-  addArticle: (article: Omit<KnowledgeArticle, 'id' | 'createdAt' | 'updatedAt' | 'views' | 'likes'>) => void;
-  updateArticle: (id: string, updates: Partial<KnowledgeArticle>) => void;
+  addArticle: (article: Omit<KnowledgeArticle, 'id' | 'createdAt' | 'updatedAt' | 'views' | 'likes' | 'versions' | 'feedback'>) => void;
+  updateArticle: (id: string, updates: Partial<KnowledgeArticle>, changeNote?: string) => void;
   deleteArticle: (id: string) => void;
   flagArticle: (id: string, userId: string) => void;
   clearFlagArticle: (id: string) => void;
+  revertArticleVersion: (articleId: string, versionId: string) => void;
+  addArticleFeedback: (articleId: string, rating: 1 | 2 | 3 | 4 | 5, comment?: string) => void;
   
   addInsightPost: (post: Omit<InsightPost, 'id' | 'createdAt' | 'upvotes' | 'hasUpvoted' | 'comments' | 'isVerifiedSolution'>) => void;
   toggleUpvote: (postId: string) => void;
@@ -71,6 +79,11 @@ interface AppState {
   updateShadowRequestStatus: (id: string, status: ShadowRequest['status']) => void;
   
   addMentorshipNote: (note: Omit<MentorshipNote, 'id' | 'createdAt'>) => void;
+  
+  trackSearch: (query: string, resultsCount: number, clickedArticleId?: string) => void;
+  
+  addKnowledgeGap: (gap: Omit<KnowledgeGap, 'id' | 'createdAt' | 'status'>) => void;
+  updateKnowledgeGapStatus: (id: string, status: KnowledgeGap['status']) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -111,6 +124,8 @@ export const useAppStore = create<AppState>()(
           createdAt: '2025-04-15T16:00:00Z',
         },
       ],
+      searchAnalytics: [],
+      knowledgeGaps: [],
 
       setCurrentUser: (user) => set({ currentUser: user }),
 
@@ -127,6 +142,8 @@ export const useAppStore = create<AppState>()(
           updatedAt: new Date().toISOString(),
           views: 0,
           likes: 0,
+          versions: [],
+          feedback: [],
         };
         set((state) => ({
           articles: [newArticle, ...state.articles],
@@ -375,6 +392,72 @@ export const useAppStore = create<AppState>()(
         };
         set((state) => ({
           mentorshipNotes: [newNote, ...state.mentorshipNotes],
+        }));
+      },
+
+      revertArticleVersion: (articleId, versionId) => {
+        const state = get();
+        const article = state.articles.find((a) => a.id === articleId);
+        if (!article) return;
+        const version = article.versions.find((v) => v.id === versionId);
+        if (!version) return;
+        state.updateArticle(articleId, { content: version.content });
+      },
+
+      addArticleFeedback: (articleId, rating, comment) => {
+        const { currentUser } = get();
+        if (!currentUser) return;
+        const feedback: ArticleFeedback = {
+          id: `feedback-${Date.now()}`,
+          articleId,
+          userId: currentUser.id,
+          rating,
+          comment,
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          articles: state.articles.map((article) =>
+            article.id === articleId
+              ? { ...article, feedback: [...article.feedback, feedback] }
+              : article
+          ),
+        }));
+      },
+
+      trackSearch: (query, resultsCount, clickedArticleId) => {
+        const { currentUser } = get();
+        const analytics: SearchAnalytics = {
+          id: `analytics-${Date.now()}`,
+          query,
+          resultsCount,
+          clickedArticleId,
+          userId: currentUser?.id,
+          timestamp: new Date().toISOString(),
+        };
+        set((state) => ({
+          searchAnalytics: [analytics, ...state.searchAnalytics],
+        }));
+      },
+
+      addKnowledgeGap: (gap) => {
+        const newGap: KnowledgeGap = {
+          ...gap,
+          id: `gap-${Date.now()}`,
+          status: 'identified',
+          createdAt: new Date().toISOString(),
+        };
+        set((state) => ({
+          knowledgeGaps: [newGap, ...state.knowledgeGaps],
+        }));
+      },
+
+      updateKnowledgeGapStatus: (id, status) => {
+        set((state) => ({
+          knowledgeGaps: state.knowledgeGaps.map((gap) =>
+            gap.id === id
+              ? { ...gap, status, resolvedAt: status === 'resolved' ? new Date().toISOString() : undefined }
+              : gap
+          ),
         }));
       },
     }),

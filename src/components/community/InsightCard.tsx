@@ -77,15 +77,15 @@ export function InsightCard({ post }: InsightCardProps) {
   return (
     <div className={`bg-white rounded-xl border ${post.isVerifiedSolution ? 'border-green-300' : 'border-slate-200'} overflow-hidden hover:shadow-md transition-shadow`}>
       {post.isVerifiedSolution && (
-        <div className="bg-green-50 border-b border-green-200 px-4 py-2 flex items-center gap-2">
-          <span className="text-lg">✅</span>
-          <span className="text-sm font-medium text-green-700">Verified Solution</span>
+        <div className="bg-green-50 border-b border-green-200 px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2">
+          <span className="text-base sm:text-lg">✅</span>
+          <span className="text-xs sm:text-sm font-medium text-green-700">Verified Solution</span>
         </div>
       )}
 
-      <div className="p-4 flex gap-4">
-        {/* Left Sidebar - Stats */}
-        <div className="flex flex-col items-center gap-2 w-16 shrink-0">
+      <div className="p-3 sm:p-4 flex gap-2 sm:gap-4">
+        {/* Left Sidebar - Stats - Hidden on mobile, shown inline in footer */}
+        <div className="hidden sm:flex flex-col items-center gap-2 w-14 shrink-0">
           <button
             onClick={handleUpvote}
             className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
@@ -127,28 +127,23 @@ export function InsightCard({ post }: InsightCardProps) {
                 <span className={`px-2 py-0.5 rounded text-xs font-medium ${style.bg} ${style.text} border ${style.border}`}>
                   {style.label}
                 </span>
-                {post.isVerifiedSolution && (
-                  <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700 border border-green-200">
-                    ✓ Verified
-                  </span>
-                )}
               </div>
-              <h3 className="text-lg font-semibold text-slate-800 hover:text-blue-600 cursor-pointer">
+              <h3 className="text-base sm:text-lg font-semibold text-slate-800 hover:text-blue-600 cursor-pointer line-clamp-2">
                 {post.title}
               </h3>
-              <p className="text-slate-600 mt-2 whitespace-pre-wrap">{post.content}</p>
+              <p className="text-slate-600 mt-2 text-sm whitespace-pre-wrap line-clamp-3 sm:line-clamp-none">{post.content}</p>
 
               {/* Code Snippet */}
               {post.codeSnippet && (
-                <div className="mt-4 rounded-lg overflow-hidden border border-slate-700">
+                <div className="mt-3 sm:mt-4 rounded-lg overflow-hidden border border-slate-700">
                   <div className="bg-slate-800 px-3 py-1.5 flex items-center justify-between">
                     <span className={`text-xs font-medium ${languageColors[post.language || 'other'] || 'text-slate-400'}`}>
                       {post.language?.toUpperCase() || 'CODE'}
                     </span>
-                    <span className="text-xs text-slate-500">snippet</span>
+                    <span className="text-xs text-slate-500 hidden sm:inline">snippet</span>
                   </div>
-                  <pre className="bg-slate-900 p-4 overflow-x-auto">
-                    <code className="text-sm text-slate-100 font-mono whitespace-pre">{post.codeSnippet}</code>
+                  <pre className="bg-slate-900 p-3 sm:p-4 overflow-x-auto max-h-48 sm:max-h-none">
+                    <code className="text-xs sm:text-sm text-slate-100 font-mono whitespace-pre">{post.codeSnippet}</code>
                   </pre>
                 </div>
               )}
@@ -156,13 +151,29 @@ export function InsightCard({ post }: InsightCardProps) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-medium">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-3 sm:mt-4 pt-3 border-t border-slate-100">
+            <div className="flex items-center gap-2">
+              {/* Mobile: inline upvotes */}
+              <div className="flex items-center gap-1 sm:hidden">
+                <button
+                  onClick={handleUpvote}
+                  className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs transition-all ${
+                    post.hasUpvoted
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-slate-500 bg-slate-50'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill={post.hasUpvoted ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                  {post.upvotes}
+                </button>
+              </div>
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-medium">
                 {authorInitials}
               </div>
-              <span className="text-sm text-slate-600">{author?.name || 'Unknown'}</span>
-              <span className="text-xs text-slate-400">asked {formatTime(post.createdAt)}</span>
+              <span className="text-xs sm:text-sm text-slate-600 hidden sm:inline">{author?.name || 'Unknown'}</span>
+              <span className="text-xs text-slate-400">{formatTime(post.createdAt)}</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -171,15 +182,15 @@ export function InsightCard({ post }: InsightCardProps) {
                   setShowComments(!showComments);
                   setShowCommentInput(false);
                 }}
-                className="px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+                className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
               >
-                {showComments ? 'Hide' : 'Show'} {post.comments.length} {post.comments.length === 1 ? 'answer' : 'answers'}
+                {post.comments.length} {post.comments.length === 1 ? 'ans' : 'answers'}
               </button>
               <button
                 onClick={() => setShowCommentInput(!showCommentInput)}
-                className="px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                className="px-2 sm:px-3 py-1 text-xs sm:text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
               >
-                Add Answer
+                Reply
               </button>
             </div>
           </div>

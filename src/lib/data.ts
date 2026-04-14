@@ -102,6 +102,7 @@ export const mockArticles: KnowledgeArticle[] = [
   {
     id: '1',
     title: 'Kebele ID Verification API Integration Guide',
+    summary: 'Integration guide for connecting to the Ministry of Peace Kebele ID system for real-time citizen identity verification.',
     content: `# Kebele ID Verification API Integration
 
 ## Overview
@@ -119,7 +120,7 @@ Bearer token authentication using ministry-issued credentials.
 \`\`\`json
 {
   "kebele_id": "ERK-1234567",
-  "full_name": "የስም",
+  "full_name": "Full Name",
   "date_of_birth": "1990-05-15",
   "region": "Addis Ababa"
 }
@@ -139,15 +140,20 @@ Bearer token authentication using ministry-issued credentials.
     category: 'Government Integrations',
     authorId: '2',
     tags: ['kebele', 'identity', 'verification', 'ministry'],
+    relatedArticles: [],
+    searchTerms: ['kebele', 'identity verification', 'ministry of peace', 'national id'],
     createdAt: '2025-01-01T00:00:00Z',
     updatedAt: '2025-04-01T09:00:00Z',
     views: 2341,
     likes: 187,
     status: 'published',
+    versions: [],
+    feedback: [],
   },
   {
     id: '2',
     title: 'Ministry of Revenue e-Tax Portal Data Migration',
+    summary: 'Step-by-step playbook for migrating taxpayer records from legacy CSV format to the new JSON API structure.',
     content: `# e-Tax Portal Data Migration Playbook
 
 ## Scope
@@ -179,15 +185,20 @@ Use batch insert with transaction rollback on failure.
     category: 'Government Integrations',
     authorId: '2',
     tags: ['e-tax', 'migration', 'revenue', 'data'],
+    relatedArticles: [],
+    searchTerms: ['e-tax', 'revenue ministry', 'data migration', 'taxpayer'],
     createdAt: '2025-02-01T10:00:00Z',
     updatedAt: '2025-04-15T14:30:00Z',
     views: 1567,
     likes: 134,
     status: 'published',
+    versions: [],
+    feedback: [],
   },
   {
     id: '3',
     title: 'E-Passport Portal API Error Handling Patterns',
+    summary: 'Common error scenarios and solutions for E-Passport Portal API integration including session timeouts and photo upload issues.',
     content: `# E-Passport Portal Error Handling
 
 ## Common Error Scenarios
@@ -213,17 +224,22 @@ circuit_breaker:
     category: 'Government Integrations',
     authorId: '3',
     tags: ['e-passport', 'errors', 'handling', 'session'],
+    relatedArticles: [],
+    searchTerms: ['e-passport', 'passport portal', 'error handling', 'session'],
     createdAt: '2025-03-10T10:30:00Z',
     updatedAt: '2025-04-20T14:22:00Z',
     views: 892,
     likes: 76,
     status: 'published',
+    versions: [],
+    feedback: [],
   },
 
   // FinTech & Payment Gateways (2 articles)
   {
     id: '4',
     title: 'Telebirr API Integration & Timeout Handling',
+    summary: 'Complete guide to integrating Safaricom Telebirr mobile money payment gateway with government service portals.',
     content: `# Telebirr Payment Gateway Integration
 
 ## Overview
@@ -264,15 +280,20 @@ Telebirr transactions must complete within 15 minutes. Implement:
     category: 'FinTech & Payment Gateways',
     authorId: '5',
     tags: ['telebirr', 'payment', 'mobile-money', 'fintech'],
+    relatedArticles: [],
+    searchTerms: ['telebirr', 'mobile money', 'payment', 'safaricom', 'ussd'],
     createdAt: '2025-01-25T08:00:00Z',
     updatedAt: '2025-04-15T16:30:00Z',
     views: 3421,
     likes: 298,
     status: 'published',
+    versions: [],
+    feedback: [],
   },
   {
     id: '5',
     title: 'Commercial Bank of Ethiopia Payment Reconciliation',
+    summary: 'Daily reconciliation workflow for CBE bulk payment API including transaction matching and discrepancy handling.',
     content: `# CBE Payment Reconciliation Process
 
 ## Daily Reconciliation Workflow
@@ -307,17 +328,22 @@ def reconcile_payments(date: datetime):
     category: 'FinTech & Payment Gateways',
     authorId: '2',
     tags: ['cbe', 'bank', 'reconciliation', 'payments'],
+    relatedArticles: [],
+    searchTerms: ['cbe', 'commercial bank', 'payment', 'reconciliation', 'transactions'],
     createdAt: '2025-03-15T09:00:00Z',
     updatedAt: '2025-04-18T11:00:00Z',
     views: 1234,
     likes: 112,
     status: 'published',
+    versions: [],
+    feedback: [],
   },
 
   // Digital Infrastructure (1 article)
   {
     id: '6',
     title: 'Ethio Telecom API Rate Limiting & Failover',
+    summary: 'Rate limiter implementation for Ethio Telecom SMS/USSD APIs with failover strategies when services are unavailable.',
     content: `# Ethio Telecom API Rate Limiting
 
 ## Current Limits
@@ -360,11 +386,15 @@ When Ethio Telecom API is unavailable:
     category: 'Digital Infrastructure',
     authorId: '5',
     tags: ['ethio-telecom', 'rate-limiting', 'sms', 'failover'],
+    relatedArticles: [],
+    searchTerms: ['ethio telecom', 'sms', 'ussd', 'rate limiting', 'failover'],
     createdAt: '2025-02-20T14:00:00Z',
     updatedAt: '2025-04-10T09:15:00Z',
     views: 876,
     likes: 89,
     status: 'published',
+    versions: [],
+    feedback: [],
   },
 ];
 
