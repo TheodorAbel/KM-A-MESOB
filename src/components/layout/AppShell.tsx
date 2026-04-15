@@ -54,10 +54,9 @@ export function AppShell({ children }: AppShellProps) {
               <span className="font-medium text-slate-700">{user?.name}</span>
               <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                 user?.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                user?.role === 'senior' ? 'bg-blue-100 text-blue-700' :
-                'bg-green-100 text-green-700'
+                'bg-blue-100 text-blue-700'
               }`}>
-                {user?.role === 'admin' ? 'Admin' : user?.role === 'senior' ? 'Senior' : 'Junior'}
+                {user?.role === 'admin' ? 'Admin' : 'Employee'}
               </span>
             </div>
           </div>

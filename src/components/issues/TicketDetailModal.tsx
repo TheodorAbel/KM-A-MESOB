@@ -28,7 +28,7 @@ const priorityColors: Record<string, { bg: string; text: string }> = {
 
 export function TicketDetailModal({ ticket, isOpen, onClose }: TicketDetailModalProps) {
   const { users } = useAppStore();
-  const { isSenior, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const [newComment, setNewComment] = useState('');
   const [showArticleEditor, setShowArticleEditor] = useState(false);
   const [comments, setComments] = useState<{ id: string; author: string; text: string; date: string }[]>([
@@ -109,7 +109,7 @@ export function TicketDetailModal({ ticket, isOpen, onClose }: TicketDetailModal
               </div>
             )}
 
-            {ticket.status === 'Resolved' && (isSenior || isAdmin) && (
+            {ticket.status === 'Resolved' && isAdmin && (
               <div className="mt-4 sm:mt-6">
                 <button
                   onClick={() => setShowArticleEditor(true)}

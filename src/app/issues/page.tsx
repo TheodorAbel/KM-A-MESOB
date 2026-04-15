@@ -28,7 +28,7 @@ const priorities: IssuePriority[] = ['Critical', 'High', 'Medium', 'Low'];
 
 export default function IssuesPage() {
   const { issueTickets, addIssueTicket, updateTicketStatus, addArticle, currentUser } = useAppStore();
-  const { isSenior, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const [selectedTicket, setSelectedTicket] = useState<IssueTicket | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNewTicketForm, setShowNewTicketForm] = useState(false);
@@ -41,7 +41,7 @@ export default function IssuesPage() {
     priority: 'Medium' as IssuePriority,
   });
 
-  const canModify = isSenior || isAdmin;
+  const canModify = isAdmin;
 
   const ticketsByStatus = useMemo(() => {
     const grouped: Record<IssueStatus, IssueTicket[]> = {

@@ -32,6 +32,7 @@ import {
 interface AppState {
   currentUser: User | null;
   users: User[];
+  setUsers: (users: User[]) => void;
   articles: KnowledgeArticle[];
   insightPosts: InsightPost[];
   issueTickets: IssueTicket[];
@@ -129,9 +130,18 @@ export const useAppStore = create<AppState>()(
 
       setCurrentUser: (user) => set({ currentUser: user }),
 
+      setUsers: (users) => set({ users }),
+
       switchRole: (role) => {
-        const user = mockUsers.find((u) => u.role === role);
-        if (user) set({ currentUser: user });
+        const { currentUser, users } = get();
+        if (currentUser) {
+          const userWithRole = users.find((u) => u.role === role);
+          if (userWithRole) {
+            set({ currentUser: userWithRole });
+          } else {
+            set({ currentUser: { ...currentUser, role } });
+          }
+        }
       },
 
       addArticle: (article) => {

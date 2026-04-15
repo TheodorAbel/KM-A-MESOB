@@ -36,10 +36,8 @@ export function TopNavbar({ onMenuToggle }: TopNavbarProps) {
     switch (role) {
       case 'admin':
         return 'bg-purple-100 text-purple-800';
-      case 'senior':
-        return 'bg-blue-100 text-blue-800';
       default:
-        return 'bg-green-100 text-green-800';
+        return 'bg-blue-100 text-blue-800';
     }
   };
 
@@ -166,11 +164,7 @@ export function TopNavbar({ onMenuToggle }: TopNavbarProps) {
                     <span
                       className={`text-xs px-1.5 py-0.5 rounded ${getRoleBadgeColor(user?.role || '')}`}
                     >
-                      {user?.role === 'admin'
-                        ? 'Admin'
-                        : user?.role === 'senior'
-                          ? 'Team Lead'
-                          : 'Junior'}
+                      {user?.role === 'admin' ? 'Admin' : 'Employee'}
                     </span>
                   </div>
                 </div>

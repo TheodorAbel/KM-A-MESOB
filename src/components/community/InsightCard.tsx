@@ -30,7 +30,7 @@ const languageColors: Record<string, string> = {
 
 export function InsightCard({ post }: InsightCardProps) {
   const { users, toggleUpvote, addComment, currentUser, verifyComment } = useAppStore();
-  const { isSenior, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -38,7 +38,7 @@ export function InsightCard({ post }: InsightCardProps) {
   const author = users.find((u) => u.id === post.authorId);
   const authorInitials = author?.name.split(' ').map((n) => n[0]).join('') || '??';
   const style = typeStyles[post.type] || typeStyles.Question;
-  const canVerify = isSenior || isAdmin;
+  const canVerify = isAdmin;
   const isQuestion = post.type === 'Question';
 
   const formatTime = (dateStr: string) => {

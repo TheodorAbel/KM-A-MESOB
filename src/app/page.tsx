@@ -69,11 +69,11 @@ function AlertCard({ alert }: { alert: typeof systemAlerts[0] }) {
 }
 
 function DashboardContent() {
-  const { user, login, isAdmin, isSenior } = useAuth();
+  const { user, isAdmin, isEmployee } = useAuth();
   const { articles } = useAppStore();
 
-  const handleRoleChange = (role: UserRole) => {
-    login(role);
+  const handleRoleChange = (_role: UserRole) => {
+    // Role switch is handled in RoleSwitcher component via switchRole
   };
 
   const recentArticles = articles
@@ -321,14 +321,14 @@ function DashboardContent() {
               <span className="hidden sm:inline">Logged in as:</span> <span className="text-white font-medium">{user?.name}</span>
               <span className={`ml-2 px-2 py-0.5 rounded text-xs font-medium ${
                 isAdmin ? 'bg-purple-500/20 text-purple-300' : 
-                isSenior ? 'bg-blue-500/20 text-blue-300' : 
-                'bg-green-500/20 text-green-300'
+                isAdmin ? 'bg-purple-500/20 text-purple-300' : 
+                'bg-blue-500/20 text-blue-300'
               }`}>
-                {isAdmin ? 'Admin' : isSenior ? 'Senior' : 'Junior'}
+                {isAdmin ? 'Admin' : 'Employee'}
               </span>
             </span>
           </div>
-          <RoleSwitcher currentRole={user?.role || 'junior'} onRoleChange={handleRoleChange} />
+          <RoleSwitcher currentRole={user?.role || 'employee'} onRoleChange={handleRoleChange} />
         </div>
       </div>
     </div>

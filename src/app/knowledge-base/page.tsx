@@ -86,12 +86,12 @@ function ArticleCard({ article, onClick }: { article: KnowledgeArticle; onClick:
 
 function ArticleViewer({ article, onClose }: { article: KnowledgeArticle; onClose: () => void }) {
   const { users, flagArticle, clearFlagArticle } = useAppStore();
-  const { user, isSenior, isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
   const author = users.find((u) => u.id === article.authorId);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' } | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
-  const canEdit = isSenior || isAdmin;
+  const canEdit = isAdmin;
 
   const handleFlag = () => {
     if (!user) return;
@@ -214,12 +214,12 @@ function ArticleViewer({ article, onClose }: { article: KnowledgeArticle; onClos
 function KnowledgeBaseContent() {
   const searchParams = useSearchParams();
   const { articles } = useAppStore();
-  const { isSenior, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const [selectedArticle, setSelectedArticle] = useState<KnowledgeArticle | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
-  const canCreate = isSenior || isAdmin;
+  const canCreate = isAdmin;
   const rawCategory = searchParams.get('category');
   const selectedCategory: ArticleCategory | 'all' = rawCategory 
     ? (rawCategory as ArticleCategory)

@@ -1,4 +1,4 @@
-export type UserRole = 'junior' | 'senior' | 'admin';
+export type UserRole = 'employee' | 'admin';
 export type Department = 'Integration' | 'DevOps' | 'Security' | 'Product' | 'Finance' | 'Quality Assurance';
 
 export interface Skill {

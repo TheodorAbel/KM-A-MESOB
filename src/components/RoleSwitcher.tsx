@@ -1,6 +1,7 @@
 'use client';
 
 import { UserRole } from '@/types';
+import { useAuth } from '@/context/AuthContext';
 
 interface RoleSwitcherProps {
   currentRole: UserRole;
@@ -9,15 +10,8 @@ interface RoleSwitcherProps {
 
 const roles: { value: UserRole; label: string; color: string; bgColor: string; borderColor: string }[] = [
   { 
-    value: 'junior', 
-    label: 'Junior Employee', 
-    color: 'text-green-700', 
-    bgColor: 'bg-green-50', 
-    borderColor: 'border-green-200' 
-  },
-  { 
-    value: 'senior', 
-    label: 'Senior / Team Lead', 
+    value: 'employee', 
+    label: 'Employee', 
     color: 'text-blue-700', 
     bgColor: 'bg-blue-50', 
     borderColor: 'border-blue-200' 
@@ -32,6 +26,13 @@ const roles: { value: UserRole; label: string; color: string; bgColor: string; b
 ];
 
 export function RoleSwitcher({ currentRole, onRoleChange }: RoleSwitcherProps) {
+  const { switchRole } = useAuth();
+  
+  const handleRoleChange = (role: UserRole) => {
+    onRoleChange(role);
+    switchRole(role);
+  };
+
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2 px-2">
@@ -45,7 +46,7 @@ export function RoleSwitcher({ currentRole, onRoleChange }: RoleSwitcherProps) {
         {roles.map((role) => (
           <button
             key={role.value}
-            onClick={() => onRoleChange(role.value)}
+            onClick={() => handleRoleChange(role.value)}
             className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all border ${
               currentRole === role.value
                 ? `${role.bgColor} ${role.color} ${role.borderColor} ring-2 ring-offset-1`

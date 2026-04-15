@@ -90,8 +90,8 @@ function ShadowRequestModal({
   onSubmit: (seniorId: string, date: string, time: string, message: string) => void;
 }) {
   const { users } = useAppStore();
-  const seniors = users.filter((u) => u.role === 'senior' || u.role === 'admin');
-  const [selectedSenior, setSelectedSenior] = useState('');
+  const mentors = users.filter((u) => u.id !== useAppStore.getState().currentUser?.id);
+  const [selectedMentor, setSelectedMentor] = useState('');
   const [proposedDate, setProposedDate] = useState('');
   const [proposedTime, setProposedTime] = useState('14:00');
   const [message, setMessage] = useState('');
@@ -99,9 +99,9 @@ function ShadowRequestModal({
   if (!isOpen) return null;
 
   const handleSubmit = () => {
-    if (!selectedSenior || !proposedDate) return;
-    onSubmit(selectedSenior, proposedDate, proposedTime, message);
-    setSelectedSenior('');
+    if (!selectedMentor || !proposedDate) return;
+    onSubmit(selectedMentor, proposedDate, proposedTime, message);
+    setSelectedMentor('');
     setProposedDate('');
     setProposedTime('14:00');
     setMessage('');
@@ -127,14 +127,14 @@ function ShadowRequestModal({
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Select Mentor</label>
             <select
-              value={selectedSenior}
-              onChange={(e) => setSelectedSenior(e.target.value)}
+              value={selectedMentor}
+              onChange={(e) => setSelectedMentor(e.target.value)}
               className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
             >
-              <option value="">Choose a senior engineer...</option>
-              {seniors.map((senior) => (
-                <option key={senior.id} value={senior.id}>
-                  {senior.name} - {senior.department}
+              <option value="">Choose a team member...</option>
+              {mentors.map((mentor) => (
+                <option key={mentor.id} value={mentor.id}>
+                  {mentor.name} - {mentor.department}
                 </option>
               ))}
             </select>
@@ -315,11 +315,11 @@ function MentorshipNotesModal({
 }
 
 export default function LearningPage() {
-  const { user, isSenior, isAdmin, isJunior } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { users, shadowRequests, mentorshipNotes, createShadowRequest, updateShadowRequestStatus, addMentorshipNote } = useAppStore();
   const [activeTab, setActiveTab] = useState<'my-progress' | 'team-progress'>('my-progress');
   const [skills, setSkills] = useState(phases);
-  const [selectedJunior, setSelectedJunior] = useState<string | null>(null);
+  const [selectedTeamMember, setSelectedTeamMember] = useState<string | null>(null);
   const [showShadowModal, setShowShadowModal] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<{ id: string; name: string } | null>(null);
   const [showNotesModal, setShowNotesModal] = useState(false);
@@ -330,12 +330,11 @@ export default function LearningPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const juniorUsers = users.filter((u) => u.role === 'junior');
-  const seniorUsers = users.filter((u) => u.role === 'senior' || u.role === 'admin');
+  const teamMembers = users.filter((u) => u.id !== user?.id);
   const currentUserPendingRequests = shadowRequests.filter(
-    (req) => req.juniorId === user?.id && req.status === 'pending'
+    (req) => req.requesterId === user?.id && req.status === 'pending'
   );
-  const myNotesForJuniors = mentorshipNotes.filter((note) => note.mentorId === user?.id);
+  const myNotesForTeam = mentorshipNotes.filter((note) => note.mentorId === user?.id);
 
   const handleToggleSkill = (skillId: string) => {
     setSkills((prev) =>
@@ -355,11 +354,11 @@ export default function LearningPage() {
     setShowShadowModal(true);
   };
 
-  const handleShadowSubmit = (seniorId: string, date: string, time: string, message: string) => {
+  const handleShadowSubmit = (mentorId: string, date: string, time: string, message: string) => {
     if (!user || !selectedSkill) return;
     createShadowRequest({
       juniorId: user.id,
-      seniorId,
+      seniorId: mentorId,
       skillId: selectedSkill.id,
       skillName: selectedSkill.name,
       proposedDate: date,
@@ -412,11 +411,11 @@ export default function LearningPage() {
 
   const progress = calculateProgress();
 
-  const selectedJuniorData = selectedJunior ? users.find((u) => u.id === selectedJunior) : null;
-  const juniorPendingRequests = shadowRequests.filter(
-    (req) => req.juniorId === selectedJunior && req.status === 'pending'
+  const selectedTeamMemberData = selectedTeamMember ? users.find((u) => u.id === selectedTeamMember) : null;
+  const teamMemberPendingRequests = shadowRequests.filter(
+    (req) => req.juniorId === selectedTeamMember && req.status === 'pending'
   );
-  const juniorNotes = mentorshipNotes.filter((note) => note.menteeId === selectedJunior);
+  const teamMemberNotes = mentorshipNotes.filter((note) => note.menteeId === selectedTeamMember);
 
   return (
     <AppShell>
@@ -461,8 +460,8 @@ export default function LearningPage() {
           )}
         </div>
 
-        {/* Tabs for Seniors/Admins */}
-        {(isSenior || isAdmin) && (
+        {/* Tabs for Admins */}
+        {isAdmin && (
           <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="flex border-b border-slate-200">
               <button
@@ -485,7 +484,7 @@ export default function LearningPage() {
               >
                 <span className="hidden sm:inline">Team Progress</span>
                 <span className="sm:hidden">Team</span>
-                <span className="ml-1 text-xs">({juniorUsers.length})</span>
+                <span className="ml-1 text-xs">({teamMembers.length})</span>
               </button>
             </div>
           </div>
@@ -546,7 +545,7 @@ export default function LearningPage() {
                               <h4 className="font-medium text-slate-800 text-sm sm:text-base">{skill.title}</h4>
                               <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1 line-clamp-2">{skill.description}</p>
                             </div>
-                            {'canRequestShadow' in skill && (skill as { canRequestShadow: boolean }).canRequestShadow && isJunior && !skill.completed && (
+                            {'canRequestShadow' in skill && (skill as { canRequestShadow: boolean }).canRequestShadow && !skill.completed && (
                               <button
                                 onClick={() => handleRequestShadow(skill.id, skill.title)}
                                 className="px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-200 transition-colors flex items-center gap-1 shrink-0"
@@ -571,7 +570,7 @@ export default function LearningPage() {
           </div>
         )}
 
-        {activeTab === 'team-progress' && (isSenior || isAdmin) && (
+        {activeTab === 'team-progress' && isAdmin && (
           <div className="space-y-4 sm:space-y-6">
             {/* Pending Shadow Requests */}
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
@@ -581,7 +580,7 @@ export default function LearningPage() {
                   <span className="hidden sm:inline">Pending Shadow Requests</span>
                   <span className="sm:hidden">Pending Requests</span>
                   <span className="ml-1 px-2 py-0.5 bg-amber-100 rounded text-xs">
-                    {shadowRequests.filter((r) => r.status === 'pending' && seniorUsers.some((s) => s.id === r.seniorId)).length}
+                    {shadowRequests.filter((r) => r.status === 'pending' && r.seniorId === user?.id).length}
                   </span>
                 </h3>
               </div>
@@ -630,30 +629,30 @@ export default function LearningPage() {
               </div>
             </div>
 
-            {/* Junior Team Members */}
+            {/* Team Members */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              {juniorUsers.map((junior) => (
+              {teamMembers.map((member) => (
                 <button
-                  key={junior.id}
-                  onClick={() => setSelectedJunior(selectedJunior === junior.id ? null : junior.id)}
+                  key={member.id}
+                  onClick={() => setSelectedTeamMember(selectedTeamMember === member.id ? null : member.id)}
                   className={`p-3 sm:p-4 rounded-xl border-2 text-left transition-all ${
-                    selectedJunior === junior.id
+                    selectedTeamMember === member.id
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-slate-200 bg-white hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center text-white font-medium text-xs sm:text-sm">
-                      {junior.name.split(' ').map((n) => n[0]).join('')}
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center text-white font-medium text-xs sm:text-sm">
+                      {member.name.split(' ').map((n) => n[0]).join('')}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-slate-800 text-sm sm:text-base truncate">{junior.name}</p>
-                      <p className="text-xs text-slate-500 hidden sm:block">{junior.department}</p>
+                      <p className="font-medium text-slate-800 text-sm sm:text-base truncate">{member.name}</p>
+                      <p className="text-xs text-slate-500 hidden sm:block">{member.department}</p>
                     </div>
                   </div>
                   <div className="mt-2 sm:mt-3 flex items-center gap-2">
                     <div className="flex-1 h-1.5 sm:h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500 rounded-full" style={{ width: '65%' }} />
+                      <div className="h-full bg-blue-500 rounded-full" style={{ width: '65%' }} />
                     </div>
                     <span className="text-xs sm:text-sm text-slate-500">65%</span>
                   </div>
@@ -661,12 +660,12 @@ export default function LearningPage() {
               ))}
             </div>
 
-            {/* Selected Junior Details */}
-            {selectedJuniorData && (
+            {/* Selected Team Member Details */}
+            {selectedTeamMemberData && (
               <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
                 <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                   <h3 className="font-semibold text-slate-800">
-                    {selectedJuniorData.name}&apos;s Progress & Requests
+                    {selectedTeamMemberData.name}&apos;s Progress & Requests
                   </h3>
                   <button
                     onClick={() => setShowNotesModal(true)}
@@ -678,12 +677,12 @@ export default function LearningPage() {
                 </div>
                 <div className="p-4">
                   {/* Completed Sessions */}
-                  {shadowRequests.filter((r) => r.juniorId === selectedJunior && r.status === 'completed').length > 0 && (
+                  {shadowRequests.filter((r) => r.juniorId === selectedTeamMember && r.status === 'completed').length > 0 && (
                     <div className="mb-4">
                       <h4 className="text-sm font-medium text-slate-600 mb-2">Completed Shadow Sessions</h4>
                       <div className="space-y-2">
                         {shadowRequests
-                          .filter((r) => r.juniorId === selectedJunior && r.status === 'completed')
+                          .filter((r) => r.juniorId === selectedTeamMember && r.status === 'completed')
                           .map((r) => (
                             <div key={r.id} className="flex items-center gap-2 text-sm text-green-700 bg-green-50 px-3 py-2 rounded-lg">
                               <span>✓</span>
@@ -695,11 +694,11 @@ export default function LearningPage() {
                   )}
 
                   {/* Pending Requests */}
-                  {juniorPendingRequests.length > 0 && (
+                  {teamMemberPendingRequests.length > 0 && (
                     <div>
                       <h4 className="text-sm font-medium text-slate-600 mb-2">Pending Requests</h4>
                       <div className="space-y-2">
-                        {juniorPendingRequests.map((req) => (
+                        {teamMemberPendingRequests.map((req) => (
                           <div key={req.id} className="flex items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-200">
                             <div>
                               <p className="font-medium text-slate-800">{req.skillName}</p>
@@ -718,11 +717,11 @@ export default function LearningPage() {
                   )}
 
                   {/* Recent Mentorship Notes */}
-                  {juniorNotes.length > 0 && (
+                  {teamMemberNotes.length > 0 && (
                     <div className="mt-4">
                       <h4 className="text-sm font-medium text-slate-600 mb-2">Recent Mentorship Notes</h4>
                       <div className="space-y-2">
-                        {juniorNotes.slice(0, 3).map((note) => (
+                        {teamMemberNotes.slice(0, 3).map((note) => (
                           <div key={note.id} className="p-3 bg-slate-50 rounded-lg">
                             <div className="flex items-center justify-between mb-1">
                               <span className="font-medium text-slate-700 text-sm">{note.skillName}</span>
@@ -735,7 +734,7 @@ export default function LearningPage() {
                     </div>
                   )}
 
-                  {juniorPendingRequests.length === 0 && juniorNotes.length === 0 && (
+                  {teamMemberPendingRequests.length === 0 && teamMemberNotes.length === 0 && (
                     <p className="text-slate-500 text-sm text-center py-4">No activity yet.</p>
                   )}
                 </div>
@@ -759,9 +758,9 @@ export default function LearningPage() {
         <MentorshipNotesModal
           isOpen={showNotesModal}
           onClose={() => setShowNotesModal(false)}
-          junior={selectedJuniorData ? { id: selectedJuniorData.id, name: selectedJuniorData.name } : null}
-          existingNotes={juniorNotes}
-          onAddNote={(note, rating) => selectedJunior && handleAddNote(selectedJunior, note, rating)}
+          junior={selectedTeamMemberData ? { id: selectedTeamMemberData.id, name: selectedTeamMemberData.name } : null}
+          existingNotes={teamMemberNotes}
+          onAddNote={(note, rating) => selectedTeamMember && handleAddNote(selectedTeamMember, note, rating)}
         />
 
         {/* Toast */}

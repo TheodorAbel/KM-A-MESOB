@@ -183,14 +183,14 @@ function CreateKnowledgeGapModal({
 
 export default function QMSFeedbackPage() {
   const { qmsFeedback, addIssueTicket, currentUser } = useAppStore();
-  const { isSenior, isAdmin } = useAuth();
+  const { isAdmin } = useAuth();
   const [selectedFeedback, setSelectedFeedback] = useState<QMSFeedback | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterSource, setFilterSource] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'failureRate' | 'date'>('failureRate');
   const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-  const canCreateTicket = isSenior || isAdmin;
+  const canCreateTicket = isAdmin;
 
   const uniqueSources = useMemo(() => {
     const sources = new Set(qmsFeedback.map(f => f.source));
