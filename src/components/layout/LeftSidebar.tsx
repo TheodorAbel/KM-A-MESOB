@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
@@ -105,8 +106,14 @@ interface LeftSidebarProps {
 }
 
 export function LeftSidebar({ isOpen, onClose }: LeftSidebarProps) {
-  const { isAdmin } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
+  const router = useRouter();
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/auth/signin');
+  };
 
   const isActive = (href?: string) => {
     if (!href) return false;
@@ -177,8 +184,28 @@ export function LeftSidebar({ isOpen, onClose }: LeftSidebarProps) {
             </ul>
           </nav>
 
-          <div className="p-4 border-t border-blue-700/50">
-            <div className="bg-blue-700/30 rounded-lg p-3 backdrop-blur">
+          <div className="p-4 border-t border-blue-700/50 space-y-3">
+            <div className="flex items-center gap-3 p-3 bg-blue-700/30 rounded-lg">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-sm font-medium shrink-0">
+                {user?.name?.split(' ').map(n => n[0]).join('') || '?'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">{user?.name}</p>
+                <p className="text-xs text-blue-300 truncate">{user?.email}</p>
+              </div>
+            </div>
+            
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-blue-200 hover:bg-blue-700/50 hover:text-white transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span className="text-sm font-medium">Sign Out</span>
+            </button>
+
+            <div className="bg-blue-700/30 rounded-lg p-3">
               <p className="text-xs text-blue-200 mb-1">Need Help?</p>
               <p className="text-sm text-white">Contact IT Support</p>
               <p className="text-xs text-blue-300">support@a-mesob.et</p>
