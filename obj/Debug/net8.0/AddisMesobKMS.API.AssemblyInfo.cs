@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AddisMesobKMS.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42f130a313db8c03e4ad716efa1b350299be3214")]
 [assembly: System.Reflection.AssemblyProductAttribute("AddisMesobKMS.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AddisMesobKMS.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
