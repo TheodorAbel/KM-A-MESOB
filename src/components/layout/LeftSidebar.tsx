@@ -131,11 +131,10 @@ export function LeftSidebar({ isOpen, onClose }: LeftSidebarProps) {
     <>
       <aside
         className={`
-          fixed left-0 top-0 bottom-0 bg-gradient-to-b from-blue-800 to-blue-900 text-white z-50
+          sticky top-0 h-screen bg-gradient-to-b from-blue-800 to-blue-900 text-white z-40
           transform transition-transform duration-300 ease-in-out
-          w-64
-          lg:translate-x-0 lg:static lg:z-30
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          w-64 shrink-0
+          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
         <div className="flex flex-col h-full">
@@ -190,7 +189,7 @@ export function LeftSidebar({ isOpen, onClose }: LeftSidebarProps) {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={onClose}
         />
       )}

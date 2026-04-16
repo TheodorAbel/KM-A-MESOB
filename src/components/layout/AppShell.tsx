@@ -22,18 +22,18 @@ export function AppShell({ children }: AppShellProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50">
       <TopNavbar onMenuToggle={toggleMobileMenu} />
       
-      <div className="flex flex-1 pt-16">
+      <div className="flex">
         <LeftSidebar isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
         
-        <main className="flex-1 lg:ml-0 min-h-[calc(100vh-4rem)] transition-all duration-300">
-          <div className="p-4 sm:p-6">{children}</div>
+        <main className="flex-1 lg:ml-0 transition-all duration-300">
+          <div className="p-4 sm:p-4 min-h-[calc(100vh-64px)]">{children}</div>
         </main>
       </div>
 
-      <footer className="bg-white border-t border-slate-200 px-4 sm:px-6 py-4">
+      <footer className="bg-white border-t border-slate-200 px-4 sm:px-4 py-3">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium text-slate-700">A-Mesob KMS</span>

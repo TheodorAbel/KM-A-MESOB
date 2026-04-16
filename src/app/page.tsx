@@ -100,69 +100,59 @@ function DashboardContent() {
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-3 sm:space-y-4">
       {/* My Active Context Banner */}
-      <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="p-2 sm:p-3 bg-blue-100 rounded-lg">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="bg-white rounded-lg border border-slate-200 p-3 sm:p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 bg-blue-100 rounded-lg">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
             </div>
             <div>
-              <div className="flex items-center gap-2 text-green-600 text-xs sm:text-sm">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <div className="flex items-center gap-2 text-green-600 text-xs">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                 <span>Active Project</span>
               </div>
-              <h2 className="text-lg sm:text-xl font-bold text-slate-800 mt-1">E-Passport Portal Integration</h2>
-              <p className="text-slate-500 text-xs sm:text-sm mt-1">Ministry of Immigration • Sprint 4 of 8 • Deadline: May 15, 2025</p>
+              <h2 className="text-sm sm:text-base font-bold text-slate-800 mt-0.5">E-Passport Portal Integration</h2>
+              <p className="text-slate-500 text-xs mt-0.5 hidden sm:block">Ministry of Immigration • Sprint 4/8</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 sm:ml-0">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm text-slate-500">Sprint Progress</p>
-              <p className="text-lg font-bold text-slate-800">62%</p>
-            </div>
-            <div className="w-20 sm:w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-slate-800 hidden sm:inline">62%</span>
+            <div className="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-full overflow-hidden">
               <div className="h-full bg-blue-500 rounded-full" style={{ width: '62%' }} />
             </div>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 mt-4 pt-4 border-t border-slate-100">
-          <div className="flex items-center gap-2 text-xs sm:text-sm">
-            <span className="text-slate-500">Stack:</span>
-            <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">Node.js</span>
-            <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">PostgreSQL</span>
-            <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono hidden sm:inline">Redis</span>
-          </div>
-          <div className="flex items-center gap-2 text-xs sm:text-sm sm:ml-auto">
-            <span className="text-slate-500">API Status:</span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 bg-green-500 rounded-full" />
-              <span className="text-green-600 font-medium">Operational</span>
-            </span>
-          </div>
+        <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-100 text-xs">
+          <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded font-mono">Node.js</span>
+          <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded font-mono">PostgreSQL</span>
+          <span className="flex items-center gap-1 ml-auto">
+            <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+            <span className="text-green-600 text-xs">Operational</span>
+          </span>
         </div>
       </div>
 
       {/* Main Grid: Alerts + Recent Updates */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-4">
         {/* Critical System Alerts - Left Column */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-            <div className="px-3 sm:px-4 py-2 sm:py-3 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div className="px-3 py-2 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <h3 className="font-semibold text-slate-800 text-sm sm:text-base">Critical System Alerts</h3>
+                <h3 className="font-medium text-slate-800 text-sm">Alerts</h3>
               </div>
-              <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">
+              <span className="px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">
                 {systemAlerts.filter(a => a.severity === 'critical').length} Critical
               </span>
             </div>
-            <div className="p-2 sm:p-4 space-y-2 sm:space-y-3 max-h-[400px] overflow-y-auto">
+            <div className="p-2 space-y-2 max-h-[250px] overflow-y-auto">
               {systemAlerts.map((alert) => (
                 <AlertCard key={alert.id} alert={alert} />
               ))}
